@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Raleway:400,700);
+
 html,body {
 background:rgba(0,0,0,.6);
 height:100%
@@ -6,10 +8,24 @@ height:100%
 body {
 color:#fff;
 text-align:center;
-text-shadow:0 1px 3px rgba(0,0,0,.5)
+text-shadow:0 1px 3px rgba(0,0,0,.5);
+font-family: 'Raleway', sans-serif;
 }
 
-div {
+a {
+color: #ccc;
+text-decoration: none;
+letter-spacing:.11em;
+font-weight: bolder;
+}
+
+a:hover,a:focus {
+outline: none;
+color: #fff;
+text-decoration: none;
+}
+
+article {
 position:relative;
 top:50%;
 transform:translateY(-50%);
@@ -24,11 +40,21 @@ background:rgba(0,0,0,.6);
 padding:1em;
 }
 
+nav > a:first-child {
+display:block;
+background-image: url("../img/icons/twitter.png");
+width:42px;
+height:43px;
+position:relative;
+left:50%;
+margin: 0 0 0 -21px;
+}
+
 @media only screen 
   and (min-device-width: 320px) 
   and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2) {
-  div {
+  article {
 	width: 100%;
 	top:40%;
 	transform:translateY(-40%);
@@ -37,19 +63,6 @@ padding:1em;
 
 p:first-child {
 font-weight:bold;
-}
-
-a {
-color: #ccc;
-text-decoration: none;
-letter-spacing:.11em;
-font-weight: bolder;
-}
-
-a:hover,a:focus {
-outline: none;
-color: #fff;
-text-decoration: none;
 }
 
 .background-image-1 {
