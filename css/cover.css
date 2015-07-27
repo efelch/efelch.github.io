@@ -9,69 +9,37 @@ text-align:center;
 text-shadow:0 1px 3px rgba(0,0,0,.5)
 }
 
-.site-wrapper {
-display:table;
-width:100%;
-height:100%;
-min-height:100%;
+div {
+height:6em;
+position:relative;
+top:50%;
+transform:translateY(-50%);
+margin:auto;
+width:34em;
 -webkit-box-shadow:inset 0 0 100px rgba(0,0,0,.5);
 box-shadow:inset 0 0 100px rgba(0,0,0,.5)
-}
-
-.site-wrapper-inner {
-display:table-cell;
-vertical-align:top
-}
-
-.cover-container {
-margin-right:auto;
-margin-left:auto;
 -moz-border-radius:50px;
 -webkit-border-radius:50px;
 border-radius:50px;
-background:rgba(0,0,0,.6)
+background:rgba(0,0,0,.6);
+padding:1em;
 }
 
-.inner {
-padding:30px
-}
-
-.cover {
-padding:15px
-}
-
-@media (min-width: 768px) {
-.site-wrapper-inner {
-vertical-align:middle
-}
-
-.cover-container {
-width:100%
-}
-}
-
-@media (min-width: 992px) {
-.cover-container {
-width:700px
-}
+p:first-child {
+font-weight:bold;
 }
 
 a {
-  position: relative;
-  display: inline-block;
-  outline: none;
-  color: #ccc;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: bolder;
+color: #ccc;
+text-decoration: none;
+letter-spacing:.11em;
+font-weight: bolder;
 }
 
-a:hover,
-a:focus {
-  outline: none;
-  color: #fff;
-  text-decoration: none;
+a:hover,a:focus {
+outline: none;
+color: #fff;
+text-decoration: none;
 }
 
 .background-image-1 {
@@ -81,6 +49,7 @@ background: url("../img/img1.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-2 {
 background: url("../img/img2.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
@@ -88,6 +57,7 @@ background: url("../img/img2.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-3 {
 background: url("../img/img3.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
@@ -95,6 +65,7 @@ background: url("../img/img3.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-4 {
 background: url("../img/img4.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
@@ -102,6 +73,7 @@ background: url("../img/img4.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-5 {
 background: url("../img/img5.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
@@ -109,6 +81,7 @@ background: url("../img/img5.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-6 {
 background: url("../img/img6.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
@@ -116,6 +89,7 @@ background: url("../img/img6.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-7 {
 background: url("../img/img7.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
@@ -123,6 +97,7 @@ background: url("../img/img7.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-8 {
 background: url("../img/img8.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
@@ -130,6 +105,7 @@ background: url("../img/img8.jpg") no-repeat center center fixed;
 -o-background-size: cover;
 background-size: cover;
 }
+
 .background-image-9 {
 background: url("../img/img9.jpg") no-repeat center center fixed; 
 -webkit-background-size: cover;
