@@ -12,21 +12,30 @@ text-shadow:0 1px 3px rgba(0,0,0,.5);
 font-family: 'Raleway', sans-serif;
 }
 
-a {
-color: #ccc;
-text-decoration: none;
-letter-spacing:.11em;
-font-weight: bolder;
+nav > a {
+line-height: 0; 
+font-size: 0;
+color: transparent; 
 }
 
-a:hover,a:focus {
-outline: none;
-color: #fff;
-text-decoration: none;
+nav > a:hover, nav> a:focus {
+line-height: 0; 
+font-size: 0;
+color: transparent; 
 }
 
-a span {
-display:none;
+nav > a:nth-child(1) {
+display:inline-block;
+background-image: url("../img/icons/twitter.png");
+width:48px;
+height:48px;
+}
+
+nav > a:nth-child(2) {
+display:inline-block;
+background-image: url("../img/icons/facebook.png");
+width:48px;
+height:48px;
 }
 
 article {
@@ -50,20 +59,6 @@ radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
 radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
 background-color:#282828;
 background-size:16px 16px;
-}
-
-nav #twitter {
-display:inline-block;
-background-image: url("../img/icons/twitter.png");
-width:48px;
-height:48px;
-}
-
-nav #facebook {
-display:inline-block;
-background-image: url("../img/icons/facebook.png");
-width:48px;
-height:48px;
 }
 
 @media only screen 
