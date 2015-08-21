@@ -25,6 +25,10 @@ color: #fff;
 text-decoration: none;
 }
 
+a span {
+display:none;
+}
+
 article {
 position:relative;
 top:50%;
