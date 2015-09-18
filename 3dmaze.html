@@ -143,7 +143,6 @@
 
       Map.prototype.update = function(seconds) {
         if (this.light > 0) this.light = Math.max(this.light - 10 * seconds, 0);
-        else if (Math.random() * 5 < seconds) this.light = 2;
       };
 
       function Camera(canvas, resolution, focalLength) {
@@ -154,7 +153,7 @@
         this.spacing = this.width / resolution;
         this.focalLength = focalLength || 0.8;
         this.range = MOBILE ? 8 : 14;
-        this.lightRange = 5;
+        this.lightRange = 10;
         this.scale = (this.width + this.height) / 1200;
       }
 
@@ -211,8 +210,6 @@
 
         for (var s = ray.length - 1; s >= 0; s--) {
           var step = ray[s];
-          var rainDrops = 1.1;
-          var rain = (rainDrops > 0) && this.project(0.1, angle, step.distance);
 
           if (s === hit) {
             var textureX = Math.floor(texture.width * step.offset);
@@ -225,10 +222,6 @@
             ctx.globalAlpha = Math.max((step.distance + step.shading) / this.lightRange - map.light, 0);
             ctx.fillRect(left, wall.top, width, wall.height);
           }
-          
-          ctx.fillStyle = '#ffffff';
-          ctx.globalAlpha = 0.15;
-          while (--rainDrops > 0) ctx.fillRect(left, Math.random() * rain.top, 1, rain.height);
         }
       };
 
