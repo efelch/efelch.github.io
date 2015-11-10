@@ -26,14 +26,7 @@ color: transparent;
 
 nav > a:nth-child(1) {
 display:inline-block;
-background-image: url("../img/icons/twitter.png");
-width:48px;
-height:48px;
-}
-
-nav > a:nth-child(2) {
-display:inline-block;
-background-image: url("../img/icons/facebook.png");
+background-image: url("../img/icons/linkedin.png");
 width:48px;
 height:48px;
 }
