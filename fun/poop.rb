@@ -3,7 +3,7 @@ require 'set'
 rows,columns = `stty size`.scan(/\d+/).map{|x| x.to_i}
 
 Poo = "💩"
-Poop = ['🔥','💩']
+Poop = ['💩','🌮']
 
 PooState = Struct.new(:row, :speed, :shape)
 poop_progress = {}
