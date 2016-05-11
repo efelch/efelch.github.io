@@ -17,6 +17,7 @@
   <![endif]-->
 </head>
 <body>
+  <img class="hidden" src="img/img.jpg"/>
   <article>
     <p>Hey, my name is Edward Felch.</p>
     <p>I'm a software engineer in Charleston, SC.</p>   
@@ -26,5 +27,15 @@
   </article>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="js/pixelate.js"></script>
+  <script>
+    setTimeout(function(){ $('img').pixelate({value: 0.03,reveal: false}) }, 3000);
+
+
+     
+        
+
+
+  </script>
 </body>
 </html>
