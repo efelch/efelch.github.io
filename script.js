@@ -186,7 +186,9 @@ const commands = {
         isGameOver = false;
         turns = 0;
         output.innerHTML = '';
-        printToTerminal(headerText);
+        if (window.innerWidth > 600) {
+            printToTerminal(headerText);
+        }
         commands.look();
         updateStatusBar();
         printToTerminal("\nGame restarted.");
@@ -325,9 +327,17 @@ input.addEventListener('keydown', (e) => {
 
         // Clear and refresh screen
         output.innerHTML = '';
-        printToTerminal(headerText);
+        if (window.innerWidth > 600) {
+            printToTerminal(headerText);
+        }
         commands.look();
         updateStatusBar();
+
+        const scrollTarget = document.documentElement || document.body;
+        setTimeout(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+            input.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 100);
         
         if (isGameOver && currentRoom === "caveDeep") {
             printToTerminal("\nType 'restart' to start over.");
@@ -348,6 +358,8 @@ document.addEventListener('click', () => {
 
 // Initial greeting
 updateStatusBar();
-printToTerminal(headerText);
+if (window.innerWidth > 600) {
+    printToTerminal(headerText);
+}
 commands.look();
 printToTerminal("\n(Type 'help' for available commands)");

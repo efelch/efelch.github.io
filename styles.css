@@ -10,8 +10,7 @@ body {
     font-family: var(--font-family);
     margin: 0;
     padding: 20px;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -70,6 +69,27 @@ body {
     margin: 30px auto 0;
     width: 100%;
     text-shadow: 0 0 5px rgba(0, 255, 65, 0.7);
+    padding-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+        min-height: -webkit-fill-available;
+    }
+    
+    .terminal-container {
+        margin-top: 40px;
+    }
+    
+    #status-bar {
+        padding: 2px 10px;
+        font-size: 0.9rem;
+    }
+    
+    input {
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
 }
 
 #output {
