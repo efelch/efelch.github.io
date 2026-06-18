@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Edward Felch</title>
-<meta name="description" content="Edward Felch's website.">
-<meta name="author" content="Edward Felch">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" href="images/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Edward Felch Personal Website - Interactive Terminal Experience">
+    <title>Edward Felch | Terminal</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header>
-<h1>Hey, my name is <a href="https://www.linkedin.com/in/edwardfelch/" rel="noreferrer">Edward Felch</a>.</h1>
-<aside>I'm a software engineer in Charleston, SC and have worked in the Lowcountry since 2007.</aside>
-<aside>I also create <a href="https://macabreandmirthworks.com">Halloween and Christmas</a> props and decor.</aside>
-</header>
+    <div id="status-bar"></div>
+    <div class="crt-overlay"></div>
+    <div class="terminal-container" id="terminal">
+        <div id="output"></div>
+        <div class="input-line">
+            <span class="prompt">></span>
+            <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false">
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
