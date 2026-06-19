@@ -7,6 +7,8 @@ let hasLeaflet = false;
 let mailboxOpen = false;
 let isGameOver = false;
 let turns = 0;
+let score = 0;
+let visitedRooms = ["westOfHouse"];
 
 const rooms = {
     westOfHouse: {
@@ -197,6 +199,8 @@ const commands = {
         mailboxOpen = false;
         isGameOver = false;
         turns = 0;
+        score = 0;
+        visitedRooms = ["westOfHouse"];
         output.innerHTML = '';
         if (window.innerWidth > 600) {
             printToTerminal(headerText);
@@ -251,6 +255,7 @@ const commands = {
         if (target === "leaflet") {
             if (currentRoom === "westOfHouse" && mailboxOpen && !hasLeaflet) {
                 hasLeaflet = true;
+                score++;
                 return "Taken.";
             } else if (hasLeaflet) {
                 return "You already have it.";
@@ -298,6 +303,10 @@ function move(direction) {
     if (nextRoom) {
         if (rooms[nextRoom]) {
             currentRoom = nextRoom;
+            if (!visitedRooms.includes(currentRoom)) {
+                visitedRooms.push(currentRoom);
+                score++;
+            }
             if (currentRoom === "caveDeep") {
                 isGameOver = true;
             }
@@ -313,7 +322,7 @@ function move(direction) {
 
 function updateStatusBar() {
     const roomName = rooms[currentRoom].name;
-    statusBar.innerHTML = `<span>${roomName}</span><span>Turns: ${turns}</span>`;
+    statusBar.innerHTML = `<span>${roomName}</span><span>Score: ${score}</span><span>Turns: ${turns}</span>`;
 }
 
 const headerText = `EDWARD FELCH: The Artisan's Portfolio
@@ -322,7 +331,7 @@ Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 10 / Serial number 20260618
+Release 11 / Serial number 20260618
 
 
 `;
