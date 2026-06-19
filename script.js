@@ -81,14 +81,24 @@ const rooms = {
     },
     forestSouth: {
         name: "FOREST",
-        description: () => "This is a dimly lit forest, with large trees all around. To the north, you can see the south side of a white house. The forest continues east and west.",
+        description: () => "This is a dimly lit forest, with large trees all around. To the north, you can see the south side of a white house. To the south, a faint path leads towards a strange clearing. The forest continues east and west.",
         exits: {
             north: "southOfHouse",
+            south: "shrine",
             east: "forestEast",
             west: "forestWest",
             n: "southOfHouse",
+            s: "shrine",
             e: "forestEast",
             w: "forestWest"
+        }
+    },
+    shrine: {
+        name: "STRANGE CLEARING",
+        description: () => "You are in a quiet clearing. In the center stands an odd shrine: a massive pile of bananas in various stages of decomposition. The smell is sickly sweet and overwhelming. A faint path leads north back into the forest.",
+        exits: {
+            north: "forestSouth",
+            n: "forestSouth"
         }
     },
     forestEast: {
@@ -164,7 +174,7 @@ const rooms = {
 };
 
 const commands = {
-    help: "Available commands: n, s, e, w, look, l, inventory, open mailbox, take leaflet, read leaflet, about, contact, clear, u, d, restart",
+    help: "Available commands: n, s, e, w, look, l, inventory, open mailbox, take leaflet, read leaflet, take banana, about, contact, clear, u, d, restart",
     n: () => move("north"),
     north: () => move("north"),
     s: () => move("south"),
@@ -242,6 +252,15 @@ const commands = {
             return "You don't have the leaflet.";
         }
     },
+    "take banana": () => {
+        if (currentRoom === "shrine") {
+            isGameOver = true;
+            return "As you reach for a banana, the air grows cold. A booming voice echoes through the clearing: 'YOU DARE TOUCH THE SACRED FRUIT?' The Banana God appears and peels you alive. You have died.";
+        } else {
+            return "You don't see any bananas here.";
+        }
+    },
+    "take bananas": () => commands["take banana"](),
     clear: () => {
         output.innerHTML = '';
     }
@@ -271,14 +290,13 @@ function updateStatusBar() {
     statusBar.innerHTML = `<span>${roomName}</span><span>Turns: ${turns}</span>`;
 }
 
-const headerText = `
-EDWARD FELCH: The Artisan's Portfolio
+const headerText = `EDWARD FELCH: The Artisan's Portfolio
 Personal interactive fiction - a maker's story
 Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 7 / Serial number 20260618
+Release 8 / Serial number 20260618
 
 
 `;
@@ -331,7 +349,7 @@ input.addEventListener('keydown', (e) => {
         commands.look();
         updateStatusBar();
 
-        if (isGameOver && currentRoom === "caveDeep") {
+        if (isGameOver && (currentRoom === "caveDeep" || currentRoom === "shrine")) {
             printToTerminal("\nType 'restart' to start over.");
         }
         
