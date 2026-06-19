@@ -358,8 +358,6 @@ document.addEventListener('click', () => {
 
 // Initial greeting
 updateStatusBar();
-if (window.innerWidth > 600) {
-    printToTerminal(headerText);
-}
+printToTerminal(headerText);
 commands.look();
 printToTerminal("\n(Type 'help' for available commands)");
