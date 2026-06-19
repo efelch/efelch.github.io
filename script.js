@@ -176,7 +176,7 @@ const rooms = {
 };
 
 const commands = {
-    help: "Available commands: n, s, e, w, look, l, inventory, open mailbox, take [item], read leaflet, about, contact, clear, u, d, restart",
+    help: "Available commands: n, s, e, w, look, l, inventory, i, open mailbox, take [item], read [item], about, contact, clear, u, d, restart",
     n: () => move("north"),
     north: () => move("north"),
     s: () => move("south"),
@@ -207,7 +207,10 @@ const commands = {
     },
     about: "Edward Felch - A craftsman and creator. Specializing in woodworking and laser engraving. Co-founder of Hanahan Personalization and Macabre and Mirthworks.",
     contact: "You can reach Edward at Hanahan Personalization or Macabre and Mirthworks. Email: contact@edwardfelch.com",
-    look: () => {
+    look: (target) => {
+        if (target) {
+            return commands.read(target);
+        }
         const room = rooms[currentRoom];
         let outputText = `${room.name}\n${room.description()}`;
         
@@ -221,7 +224,7 @@ const commands = {
         
         printToTerminal(outputText);
     },
-    l: () => commands.look(),
+    l: (target) => commands.look(target),
     inventory: () => {
         if (hasLeaflet) {
             return "You are holding a leaflet.";
@@ -229,6 +232,7 @@ const commands = {
             return "You are empty-handed.";
         }
     },
+    i: () => commands.inventory(),
     "open mailbox": () => {
         if (currentRoom === "westOfHouse") {
             mailboxOpen = true;
@@ -270,12 +274,18 @@ const commands = {
 
         return "You don't see that here.";
     },
-    "read leaflet": () => {
-        if (hasLeaflet) {
-            return "WELCOME TO THE PERSONAL SITE OF EDWARD FELCH! Edward is a maker of things, a dreamer of dreams, and a frequent dweller in the digital realm. Commands like 'about' and 'contact' will reveal more secrets.";
-        } else {
-            return "You don't have the leaflet.";
+    read: (target) => {
+        if (!target) {
+            return "Read what?";
         }
+        if (target === "leaflet") {
+            if (hasLeaflet) {
+                return "WELCOME TO THE PERSONAL SITE OF EDWARD FELCH! Edward is a maker of things, a dreamer of dreams, and a frequent dweller in the digital realm. Commands like 'about' and 'contact' will reveal more secrets.";
+            } else {
+                return "You don't have the leaflet.";
+            }
+        }
+        return "You don't see that here.";
     },
     clear: () => {
         output.innerHTML = '';
@@ -312,7 +322,7 @@ Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 9 / Serial number 20260618
+Release 10 / Serial number 20260618
 
 
 `;
