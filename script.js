@@ -280,7 +280,7 @@ Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 4 / Serial number 20260618
+Release 5 / Serial number 20260618
 
 
 `;
@@ -333,11 +333,16 @@ input.addEventListener('keydown', (e) => {
         commands.look();
         updateStatusBar();
 
-        const scrollTarget = document.documentElement || document.body;
-        setTimeout(() => {
-            window.scrollTo(0, document.body.scrollHeight);
-            input.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }, 100);
+        if (window.innerWidth > 600) {
+            const scrollTarget = document.documentElement || document.body;
+            setTimeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+                input.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        } else {
+            // On mobile, scroll to top so they see the room description
+            window.scrollTo(0, 0);
+        }
         
         if (isGameOver && currentRoom === "caveDeep") {
             printToTerminal("\nType 'restart' to start over.");
