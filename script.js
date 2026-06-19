@@ -11,6 +11,7 @@ let turns = 0;
 const rooms = {
     westOfHouse: {
         name: "WEST OF HOUSE",
+        items: ["leaflet"],
         description: () => {
             let desc = "You are standing in an open field west of a white house, with a boarded front door. ";
             desc += mailboxOpen ? "There is an open mailbox here." : "There is a small mailbox here.";
@@ -95,6 +96,7 @@ const rooms = {
     },
     shrine: {
         name: "STRANGE CLEARING",
+        items: ["banana"],
         description: () => "You are in a quiet clearing. In the center stands an odd shrine: a massive pile of bananas in various stages of decomposition. The smell is sickly sweet and overwhelming. A faint path leads north back into the forest.",
         exits: {
             north: "forestSouth",
@@ -174,7 +176,7 @@ const rooms = {
 };
 
 const commands = {
-    help: "Available commands: n, s, e, w, look, l, inventory, open mailbox, take leaflet, read leaflet, take banana, about, contact, clear, u, d, restart",
+    help: "Available commands: n, s, e, w, look, l, inventory, open mailbox, take [item], read leaflet, about, contact, clear, u, d, restart",
     n: () => move("north"),
     north: () => move("north"),
     s: () => move("south"),
@@ -235,15 +237,38 @@ const commands = {
             return "You don't see that here.";
         }
     },
-    "take leaflet": () => {
-        if (currentRoom === "westOfHouse" && mailboxOpen && !hasLeaflet) {
-            hasLeaflet = true;
-            return "Taken.";
-        } else if (hasLeaflet) {
-            return "You already have it.";
-        } else {
-            return "You don't see that here.";
+    take: (target) => {
+        if (!target) {
+            return "Take what?";
         }
+
+        const roomItems = rooms[currentRoom].items || [];
+        
+        if (target === "leaflet") {
+            if (currentRoom === "westOfHouse" && mailboxOpen && !hasLeaflet) {
+                hasLeaflet = true;
+                return "Taken.";
+            } else if (hasLeaflet) {
+                return "You already have it.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+
+        if (target === "banana" || target === "bananas") {
+            if (currentRoom === "shrine") {
+                isGameOver = true;
+                return "As you reach for a banana, the air grows cold. A booming voice echoes through the clearing: 'YOU DARE TOUCH THE SACRED FRUIT?' The Banana God appears and peels you alive. You have died.";
+            } else {
+                return "You don't see any bananas here.";
+            }
+        }
+
+        if (roomItems.includes(target)) {
+            return `You can't take the ${target} yet.`; // Placeholder for other items
+        }
+
+        return "You don't see that here.";
     },
     "read leaflet": () => {
         if (hasLeaflet) {
@@ -252,15 +277,6 @@ const commands = {
             return "You don't have the leaflet.";
         }
     },
-    "take banana": () => {
-        if (currentRoom === "shrine") {
-            isGameOver = true;
-            return "As you reach for a banana, the air grows cold. A booming voice echoes through the clearing: 'YOU DARE TOUCH THE SACRED FRUIT?' The Banana God appears and peels you alive. You have died.";
-        } else {
-            return "You don't see any bananas here.";
-        }
-    },
-    "take bananas": () => commands["take banana"](),
     clear: () => {
         output.innerHTML = '';
     }
@@ -296,7 +312,7 @@ Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 8 / Serial number 20260618
+Release 9 / Serial number 20260618
 
 
 `;
@@ -321,6 +337,9 @@ input.addEventListener('keydown', (e) => {
         // Execute command
         let commandOutput = "";
         
+        const [action, ...args] = cmd.split(' ');
+        const arg = args.join(' ');
+
         if (isGameOver && cmd !== 'restart') {
             commandOutput = "The game is over. Type 'restart' to play again.";
         } else if (commands[cmd]) {
@@ -330,6 +349,9 @@ input.addEventListener('keydown', (e) => {
             } else {
                 commandOutput = commands[cmd];
             }
+        } else if (commands[action] && typeof commands[action] === 'function') {
+            const result = commands[action](arg);
+            if (result) commandOutput = result;
         } else if (!isGameOver && rooms[currentRoom].exits[cmd]) {
             commandOutput = move(cmd);
         } else if (cmd !== '') {
