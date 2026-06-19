@@ -278,7 +278,7 @@ Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 6 / Serial number 20260618
+Release 7 / Serial number 20260618
 
 
 `;
