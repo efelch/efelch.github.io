@@ -14,6 +14,7 @@ const rooms = {
     westOfHouse: {
         name: "WEST OF HOUSE",
         items: ["leaflet"],
+        objects: ["mailbox"],
         description: () => {
             let desc = "You are standing in an open field west of a white house, with a boarded front door. ";
             desc += mailboxOpen ? "There is an open mailbox here." : "There is a small mailbox here.";
@@ -99,6 +100,7 @@ const rooms = {
     shrine: {
         name: "STRANGE CLEARING",
         items: ["banana"],
+        objects: ["shrine"],
         description: () => "You are in a quiet clearing. In the center stands an odd shrine: a massive pile of bananas in various stages of decomposition. The smell is sickly sweet and overwhelming. A faint path leads north back into the forest.",
         exits: {
             north: "forestSouth",
@@ -178,7 +180,7 @@ const rooms = {
 };
 
 const commands = {
-    help: "Available commands: n, s, e, w, look, l, inventory, i, open mailbox, take [item], read [item], about, contact, clear, u, d, restart",
+    help: "Available commands: north, south, east, west, up, down, look, inventory, open [object], take [item], read [item], about, contact, clear, restart",
     n: () => move("north"),
     north: () => move("north"),
     s: () => move("south"),
@@ -237,13 +239,22 @@ const commands = {
         }
     },
     i: () => commands.inventory(),
-    "open mailbox": () => {
-        if (currentRoom === "westOfHouse") {
-            mailboxOpen = true;
-            return "Opening the small mailbox reveals a leaflet.";
-        } else {
-            return "You don't see that here.";
+    open: (target) => {
+        if (!target) {
+            return "Open what?";
         }
+        if (target === "mailbox") {
+            if (currentRoom === "westOfHouse") {
+                if (mailboxOpen) {
+                    return "The mailbox is already open.";
+                }
+                mailboxOpen = true;
+                return "Opening the small mailbox reveals a leaflet.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+        return "You can't open that.";
     },
     take: (target) => {
         if (!target) {
@@ -251,6 +262,7 @@ const commands = {
         }
 
         const roomItems = rooms[currentRoom].items || [];
+        const roomObjects = rooms[currentRoom].objects || [];
         
         if (target === "leaflet") {
             if (currentRoom === "westOfHouse" && mailboxOpen && !hasLeaflet) {
@@ -275,6 +287,16 @@ const commands = {
 
         if (roomItems.includes(target)) {
             return `You can't take the ${target} yet.`; // Placeholder for other items
+        }
+
+        if (roomObjects.includes(target)) {
+            if (target === "mailbox") {
+                return "The mailbox is securely bolted to the ground. Maybe try opening the mailbox?";
+            }
+            if (target === "shrine") {
+                return "You try to lift the massive pile of rotting bananas. It's heavy, it's sticky, and it's definitely not going in your pocket. You could take a single banana.";
+            }
+            return "That is part of the scenery.";
         }
 
         return "You don't see that here.";
@@ -331,7 +353,7 @@ Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 11 / Serial number 20260618
+Release 14 / Serial number 20260618
 
 
 `;
