@@ -272,15 +272,13 @@ function updateStatusBar() {
 }
 
 const headerText = `
-
-
 EDWARD FELCH: The Artisan's Portfolio
 Personal interactive fiction - a maker's story
 Copyright (c) 2024, 2025, 2026
 Edward Felch, Inc. All rights reserved.
 Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
-Release 5 / Serial number 20260618
+Release 6 / Serial number 20260618
 
 
 `;
@@ -333,23 +331,27 @@ input.addEventListener('keydown', (e) => {
         commands.look();
         updateStatusBar();
 
-        if (window.innerWidth > 600) {
-            const scrollTarget = document.documentElement || document.body;
-            setTimeout(() => {
-                window.scrollTo(0, document.body.scrollHeight);
-                input.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }, 100);
-        } else {
-            // On mobile, scroll to top so they see the room description
-            window.scrollTo(0, 0);
-        }
-        
         if (isGameOver && currentRoom === "caveDeep") {
             printToTerminal("\nType 'restart' to start over.");
         }
         
         if (commandOutput) {
             printToTerminal("\n" + commandOutput);
+        }
+
+        // Handle scrolling after all content is printed
+        if (window.innerWidth > 600) {
+            setTimeout(() => {
+                input.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        } else {
+            // On mobile, scroll to top so they see the room description
+            // Use setTimeout to ensure DOM is updated and keyboard state is stable
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }, 50);
         }
         
         input.value = '';
