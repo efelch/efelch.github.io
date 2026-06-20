@@ -307,16 +307,16 @@ const rooms = {
         description: () => {
             let desc = "The kitchen is unnervingly clean, yet a faint smell of decay lingers. A table sits in the center. ";
             desc += gameState.drawerOpen ? "The drawer is open." : "The drawer is closed.";
-            desc += " To the west is the living room, north leads to a bedroom, and south leads to a garage. A door leads east out to the yard.";
+            desc += " To the west is the living room, north leads to a bedroom, and south leads to a garage. The window leads out to the yard.";
             return desc;
         },
         exits: {
-            east: "eastOfHouse",
+            east: "You have to go 'out' through the window.",
             west: "livingRoom",
             north: "bedroom",
             south: "garage",
             out: "eastOfHouse",
-            e: "eastOfHouse",
+            e: "You have to go 'out' through the window.",
             w: "livingRoom",
             n: "bedroom",
             s: "garage"

@@ -35,7 +35,7 @@ const terminal = {
             overlay.style.display = 'flex';
             setTimeout(() => {
                 overlay.style.display = 'none';
-            }, 350); // Display quickly
+            }, 250); // Display quickly
         }
     }
 };

@@ -75,7 +75,7 @@ function findMatch(target, list) {
 
 const commands = {
     help: () => {
-        const gameCommands = "Game commands: north, south, east, west, up, down, look, examine [object], inventory, take [item], use [item], read [item], open [object], move [object], clear, restart";
+        const gameCommands = "Game commands: north, south, east, west, up, down, look, examine [object], inventory, take [item], use [item], read [item], open [object], close [object], move [object], clear, restart";
         const personalCommands = "About Edward: about, bio, resume, links, photos, contact";
         return `${gameCommands}\n${personalCommands}`;
     },
@@ -164,6 +164,78 @@ const commands = {
             }
         }
         return "You can't open that.";
+    },
+    close: (target) => {
+        if (!target) {
+            return "Close what?";
+        }
+        
+        const roomObjects = rooms[gameState.currentRoom].objects || [];
+        const matchedObject = findMatch(target, roomObjects);
+
+        if (matchedObject === "mailbox") {
+            if (gameState.currentRoom === "westOfHouse") {
+                if (!gameState.mailboxOpen) {
+                    return "The mailbox is already closed.";
+                }
+                gameState.mailboxOpen = false;
+                return "You close the small mailbox.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+
+        if (matchedObject === "drawer") {
+            if (gameState.currentRoom === "kitchen") {
+                if (!gameState.drawerOpen) {
+                    return "The drawer is already closed.";
+                }
+                gameState.drawerOpen = false;
+                return "You close the drawer.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+
+        if (matchedObject === "filing cabinet") {
+            if (gameState.currentRoom === "livingRoom") {
+                if (!gameState.filingCabinetOpen) {
+                    return "The filing cabinet is already closed.";
+                }
+                gameState.filingCabinetOpen = false;
+                return "You close the filing cabinet.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+
+        if (matchedObject === "crates") {
+            if (gameState.currentRoom === "attic") {
+                if (!gameState.cratesOpen) {
+                    return "The crates are already closed.";
+                }
+                gameState.cratesOpen = false;
+                return "You close the dusty crates.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+
+        if (matchedObject === "trapdoor") {
+            if (gameState.currentRoom === "livingRoom") {
+                if (!gameState.rugMoved) {
+                    return "You don't see that here.";
+                }
+                if (!gameState.trapdoorOpen) {
+                    return "The trapdoor is already closed.";
+                }
+                gameState.trapdoorOpen = false;
+                return "You push the heavy trapdoor closed. It shuts with a dull thud.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+        return "You can't close that.";
     },
     move: (target) => {
         if (!target) return "Move what?";
