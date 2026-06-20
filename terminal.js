@@ -27,6 +27,16 @@ const terminal = {
                 document.documentElement.scrollTop = 0;
             }, 50);
         }
+    },
+    
+    showJumpScare: function() {
+        const overlay = document.getElementById('jumpscare-overlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 350); // Display quickly
+        }
     }
 };
 
@@ -72,7 +82,7 @@ terminal.input.addEventListener('keydown', (e) => {
         commands.look();
         updateStatusBar();
 
-        if (gameState.isGameOver && (gameState.currentRoom === "caveDeep" || gameState.currentRoom === "shrine")) {
+        if (gameState.isGameOver && (gameState.currentRoom === "caveEntrance" || gameState.currentRoom === "caveDeep" || gameState.currentRoom === "shrine")) {
             terminal.print("\nType 'restart' to start over.");
         }
         
@@ -80,6 +90,12 @@ terminal.input.addEventListener('keydown', (e) => {
             terminal.print("\n" + commandOutput);
         }
 
+        const eventMessage = getRandomEventMessage();
+        if (eventMessage && !gameState.isGameOver) {
+            terminal.print("\n" + eventMessage);
+        }
+
+        saveGame();
         terminal.handleScrolling();
         terminal.input.value = '';
     }
@@ -91,8 +107,12 @@ document.addEventListener('click', () => {
 
 // Initial greeting
 window.onload = () => {
+    const loaded = loadGame();
     updateStatusBar();
     terminal.print(headerText);
     commands.look();
+    if (loaded) {
+        terminal.print("\nGame resumed from saved state.");
+    }
     terminal.print("\n(Type 'help' for available commands)");
 };
