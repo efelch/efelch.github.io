@@ -75,7 +75,8 @@ function findMatch(target, list) {
 
 function move(direction) {
     const room = rooms[gameState.currentRoom];
-    let nextRoom = room.exits[direction];
+    const targetDirection = directionAliases[direction] || direction;
+    let nextRoom = room.exits[targetDirection];
 
     if (typeof nextRoom === 'function') {
         nextRoom = nextRoom();

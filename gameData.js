@@ -134,6 +134,15 @@ const roomTypes = {
     ]
 };
 
+const directionAliases = {
+    'n': 'north',
+    's': 'south',
+    'e': 'east',
+    'w': 'west',
+    'u': 'up',
+    'd': 'down'
+};
+
 const rooms = {
     westOfHouse: {
         name: "WEST OF HOUSE",
@@ -149,11 +158,7 @@ const rooms = {
             north: "northOfHouse",
             south: "southOfHouse",
             west: "forestWest",
-            east: "The door is boarded and cannot be opened.",
-            n: "northOfHouse",
-            s: "southOfHouse",
-            w: "forestWest",
-            e: "The door is boarded and cannot be opened."
+            east: "The door is boarded and cannot be opened."
         }
     },
     northOfHouse: {
@@ -161,12 +166,10 @@ const rooms = {
         typeOfRoom: "forest",
         description: () => "You are facing the north side of a white house. There is no door here, and the windows are barred with heavy, rusted iron. To the north, the forest looms like a wall of shadows.",
         exits: {
-            south: "westOfHouse",
+            west: "westOfHouse",
             north: "forestNorth",
             east: "eastOfHouse",
-            s: "westOfHouse",
-            n: "forestNorth",
-            e: "eastOfHouse"
+            south: "The house is solid here, and the windows are barred."
         }
     },
     southOfHouse: {
@@ -174,12 +177,10 @@ const rooms = {
         typeOfRoom: "forest",
         description: () => "You are facing the south side of a white house. The paint is peeling like dead skin. To the south, the forest seems to be slowly encroaching on the property.",
         exits: {
-            north: "westOfHouse",
+            west: "westOfHouse",
             south: "forestSouth",
             east: "eastOfHouse",
-            n: "westOfHouse",
-            s: "forestSouth",
-            e: "eastOfHouse"
+            north: "The house is solid here, and the paint is peeling."
         }
     },
     eastOfHouse: {
@@ -192,11 +193,7 @@ const rooms = {
             south: "southOfHouse",
             east: "forestEast",
             "enter window": "kitchen",
-            "in": "kitchen",
-            w: "The house is solid here, except for the window.",
-            n: "northOfHouse",
-            s: "southOfHouse",
-            e: "forestEast"
+            "in": "kitchen"
         }
     },
     forestNorth: {
@@ -207,10 +204,7 @@ const rooms = {
         exits: {
             south: "northOfHouse",
             east: "forestEast",
-            west: "forestWest",
-            s: "northOfHouse",
-            e: "forestEast",
-            w: "forestWest"
+            west: "forestWest"
         }
     },
     forestSouth: {
@@ -222,11 +216,7 @@ const rooms = {
             north: "southOfHouse",
             south: "shrine",
             east: "forestEast",
-            west: "forestWest",
-            n: "southOfHouse",
-            s: "shrine",
-            e: "forestEast",
-            w: "forestWest"
+            west: "forestWest"
         }
     },
     shrine: {
@@ -236,8 +226,7 @@ const rooms = {
         objects: ["shrine"],
         description: () => "You are in a quiet clearing. In the center stands an odd shrine: a massive pile of bananas in various stages of decomposition. The smell is sickly sweet and overwhelming. A faint path leads north back into the forest.",
         exits: {
-            north: "forestSouth",
-            n: "forestSouth"
+            north: "forestSouth"
         }
     },
     forestEast: {
@@ -248,11 +237,7 @@ const rooms = {
             west: "eastOfHouse",
             east: "caveEntrance",
             north: "forestNorth",
-            south: "forestSouth",
-            w: "eastOfHouse",
-            e: "caveEntrance",
-            n: "forestNorth",
-            s: "forestSouth"
+            south: "forestSouth"
         }
     },
     forestWest: {
@@ -262,10 +247,7 @@ const rooms = {
         exits: {
             east: "westOfHouse",
             north: "forestNorth",
-            south: "forestSouth",
-            e: "westOfHouse",
-            n: "forestNorth",
-            s: "forestSouth"
+            south: "forestSouth"
         }
     },
     caveEntrance: {
@@ -280,9 +262,7 @@ const rooms = {
         },
         exits: {
             west: "forestEast",
-            east: "caveDeep",
-            w: "forestEast",
-            e: "caveDeep"
+            east: "caveDeep"
         }
     },
     caveDeep: {
@@ -295,8 +275,7 @@ const rooms = {
             return "As you walk deeper into the cave, you feel a large presence leap toward you! You have been eaten by a grue.";
         },
         exits: {
-            west: "caveEntrance",
-            w: "caveEntrance"
+            west: "caveEntrance"
         }
     },
     kitchen: {
@@ -315,11 +294,7 @@ const rooms = {
             west: "livingRoom",
             north: "bedroom",
             south: "garage",
-            out: "eastOfHouse",
-            e: "You have to go 'out' through the window.",
-            w: "livingRoom",
-            n: "bedroom",
-            s: "garage"
+            out: "eastOfHouse"
         }
     },
     livingRoom: {
@@ -346,13 +321,6 @@ const rooms = {
                 if (!gameState.rugMoved) return "You can't go that way.";
                 if (!gameState.trapdoorOpen) return "The trapdoor is closed.";
                 return "cellar";
-            },
-            e: "kitchen",
-            u: "attic",
-            d: () => {
-                if (!gameState.rugMoved) return "You can't go that way.";
-                if (!gameState.trapdoorOpen) return "The trapdoor is closed.";
-                return "cellar";
             }
         }
     },
@@ -361,8 +329,7 @@ const rooms = {
         typeOfRoom: "house",
         description: () => "You are in a dark, damp cellar. The air is thick with the smell of wet earth and rot. A ladder leads up to the living room.",
         exits: {
-            up: "livingRoom",
-            u: "livingRoom"
+            up: "livingRoom"
         }
     },
     bedroom: {
@@ -371,8 +338,7 @@ const rooms = {
         objects: ["bed", "vanity mirror"],
         description: () => "This bedroom feels like it was abandoned in a hurry. A moth-eaten bed stands against one wall, and a cracked mirror reflects the dim light. To the south is the kitchen.",
         exits: {
-            south: "kitchen",
-            s: "kitchen"
+            south: "kitchen"
         }
     },
     garage: {
@@ -381,8 +347,7 @@ const rooms = {
         objects: ["workbench", "rusty tools"],
         description: () => "The garage is cold and smells of old gasoline. Shadows stretch long across the oil-stained floor. A workbench sits against the far wall. To the north is the kitchen.",
         exits: {
-            north: "kitchen",
-            n: "kitchen"
+            north: "kitchen"
         }
     },
     attic: {
@@ -396,8 +361,7 @@ const rooms = {
             return desc;
         },
         exits: {
-            down: "livingRoom",
-            d: "livingRoom"
+            down: "livingRoom"
         }
     }
 };

@@ -64,7 +64,7 @@ terminal.input.addEventListener('keydown', (e) => {
         } else if (commands[action] && typeof commands[action] === 'function') {
             const result = commands[action](arg);
             if (result) commandOutput = result;
-        } else if (!gameState.isGameOver && rooms[gameState.currentRoom].exits[cmd]) {
+        } else if (!gameState.isGameOver && (rooms[gameState.currentRoom].exits[cmd] || rooms[gameState.currentRoom].exits[directionAliases[cmd]])) {
             commandOutput = move(cmd);
         } else if (cmd !== '') {
             commandOutput = gameState.isGameOver ? "The game is over. Type 'restart' to play again." : `Unknown command: ${cmd}. Type 'help' for help.`;
