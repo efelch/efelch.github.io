@@ -6,8 +6,45 @@
     <meta name="description" content="Edward Felch's Personal Website - Maker of things, software engineer, specializing in woodworking and laser engraving.">
     <meta name="keywords" content="Edward Felch, Software Engineer, Architect, Maker, Woodworking, Laser Engraving, Hanahan Personalization, Macabre and Mirthworks, Interactive Portfolio, Terminal Website">
     <meta name="author" content="Edward Felch">
-    <title>Edward Felch | Terminal Portfolio</title>
+    <title>Edward Felch | Software Engineer, Maker & Artisan</title>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://edwardfelch.com/">
+    <meta property="og:title" content="Edward Felch | Software Engineer, Maker & Artisan">
+    <meta property="og:description" content="Explore the interactive terminal portfolio of Edward Felch - Software Engineer and Artisan specializing in woodworking and laser engraving.">
+    <meta property="og:image" content="https://edwardfelch.com/images/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://edwardfelch.com/">
+    <meta property="twitter:title" content="Edward Felch | Software Engineer, Maker & Artisan">
+    <meta property="twitter:description" content="Explore the interactive terminal portfolio of Edward Felch - Software Engineer and Artisan specializing in woodworking and laser engraving.">
+    <meta property="twitter:image" content="https://edwardfelch.com/images/og-image.jpg">
+
+    <link rel="canonical" href="https://edwardfelch.com/">
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Edward Felch",
+      "url": "https://edwardfelch.com",
+      "jobTitle": "Software Engineer & Artisan",
+      "knowsAbout": ["Software Engineering", "System Architecture", "Woodworking", "Laser Engraving", "Haloween", "Christmas"],
+      "brand": [
+        {
+          "@type": "Brand",
+          "name": "Hanahan Personalization"
+        },
+        {
+          "@type": "Brand",
+          "name": "Macabre and Mirthworks"
+        }
+      ]
+    }
+    </script>
 </head>
 <body>
     <header id="site-header" style="display: none;">
@@ -18,6 +55,30 @@ Hanahan Personalization, All rights reserved.
 Macabre and Mirthworks, All rights reserved.
 Version 1.0.0
     </header>
+
+    <!-- SEO Content - Accessible to crawlers but hidden from view -->
+    <section id="seo-content" style="position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;">
+        <h1>Edward Felch</h1>
+        <h2>Software Engineer, Architect, & Maker</h2>
+        <p>Edward Felch is a senior software architect and co-founder of Hanahan Personalization and Macabre and Mirthworks. Specializing in woodworking, laser engraving, and full-stack development.</p>
+        
+        <h3>Skills & Expertise</h3>
+        <ul>
+            <li>Software Architecture & Full-stack Development</li>
+            <li>Woodworking & Artisan Crafts</li>
+            <li>Laser Engraving & Personalization</li>
+        </ul>
+
+        <h3>Projects & Businesses</h3>
+        <article>
+            <h4>Hanahan Personalization</h4>
+            <p>Custom woodworking and laser engraved gifts.</p>
+        </article>
+        <article>
+            <h4>Macabre and Mirthworks</h4>
+            <p>Spooky and whimsical artisanal creations.</p>
+        </article>
+    </section>
     <div id="status-bar"></div>
     <div class="crt-overlay"></div>
     <div id="jumpscare-overlay">
@@ -32,6 +93,7 @@ Version 1.0.0
     </div>
     <script src="gameData.js"></script>
     <script src="gameEngine.js"></script>
+    <script src="commands.js"></script>
     <script src="terminal.js"></script>
 </body>
 </html>
