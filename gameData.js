@@ -1,17 +1,10 @@
-const headerText = `EDWARD FELCH: The Artisan's Portfolio
-Personal interactive fiction - a maker's story
-Copyright (c) 2024, 2025, 2026
-Edward Felch, Inc. All rights reserved.
-Hanahan Personalization, All rights reserved.
-Macabre and Mirthworks, All rights reserved.
-Release 16 / Serial number 20260618
-
-
-`;
+const headerElement = document.getElementById('site-header');
+const headerText = headerElement ? headerElement.textContent.trim() + "\n\n" : "";
 
 const itemData = {
     leaflet: {
-        description: "WELCOME TO THE PERSONAL SITE OF EDWARD FELCH! Edward is a maker of things, a dreamer of dreams, and a frequent dweller in the digital realm. Commands like 'about' and 'contact' will reveal more secrets."
+        description: "WELCOME TO THE PERSONAL SITE OF EDWARD FELCH! Edward is a maker of things, a dreamer of dreams, and a frequent dweller in the digital realm. Commands like 'about' and 'contact' will reveal more secrets.",
+        isVisible: (state) => state.mailboxOpen || state.hasLeaflet
     },
     mailbox: {
         description: "It's a small, slightly rusted mailbox, the kind you'd see in front of a white house. It has no name on it."
@@ -33,6 +26,15 @@ const itemData = {
     },
     crates: {
         description: "The crates are old and covered in a thick layer of dust. They haven't been opened in years."
+    },
+    "giant oak tree": {
+        description: "It's an ancient oak tree, its gnarled branches reaching towards the sky like skeletal fingers."
+    },
+    "tangled brambles": {
+        description: "The brambles are thick and thorny, making it impossible to pass through them. They seem to twitch occasionally."
+    },
+    "grue tracks": {
+        description: "Faint, unsettling impressions in the dirt. They look like three-toed claws, but they're too large to belong to any known animal."
     }
 };
 
@@ -99,7 +101,8 @@ const rooms = {
     },
     forestNorth: {
         name: "FOREST",
-        description: () => "This is a dimly lit forest, with large trees all around. To the south, you can see the north side of a white house. The forest continues east and west.",
+        objects: ["giant oak tree"],
+        description: () => "This is a dimly lit forest, with large trees all around. A giant oak tree dominates this part of the woods. To the south, you can see the north side of a white house. The forest continues east and west.",
         exits: {
             south: "northOfHouse",
             east: "forestEast",
@@ -111,7 +114,8 @@ const rooms = {
     },
     forestSouth: {
         name: "FOREST",
-        description: () => "This is a dimly lit forest, with large trees all around. To the north, you can see the south side of a white house. To the south, a faint path leads towards a strange clearing. The forest continues east and west.",
+        objects: ["tangled brambles"],
+        description: () => "This is a dimly lit forest, with large trees all around. Tangled brambles block any path further south, except for a faint path leading towards a strange clearing. To the north, you can see the south side of a white house. The forest continues east and west.",
         exits: {
             north: "southOfHouse",
             south: "shrine",
@@ -161,7 +165,8 @@ const rooms = {
     },
     caveEntrance: {
         name: "CAVE ENTRANCE",
-        description: () => "It is pitch black. You are likely to be eaten by a grue.",
+        objects: ["grue tracks"],
+        description: () => "It is pitch black. You can see some faint grue tracks on the ground near the entrance. You are likely to be eaten by a grue.",
         exits: {
             west: "forestEast",
             east: "caveDeep",
@@ -171,7 +176,7 @@ const rooms = {
     },
     caveDeep: {
         name: "DEEP CAVE",
-        description: () => "You have been eaten by a grue.",
+        description: () => "As you walk deeper into the cave, you feel a large presence leap toward you! You have been eaten by a grue.",
         exits: {}
     },
     kitchen: {

@@ -8,8 +8,29 @@ const gameState = {
     visitedRooms: ["westOfHouse"]
 };
 
+function findMatch(target, list) {
+    if (!target || !list) return null;
+    target = target.toLowerCase().trim();
+    
+    // Exact match first
+    if (list.includes(target)) return target;
+    
+    // Fuzzy match: check if target matches any word in the object names
+    for (const item of list) {
+        const words = item.toLowerCase().split(' ');
+        if (words.includes(target)) return item;
+    }
+    
+    // Partial match: check if target is part of the name (e.g., "oak tree" matches "giant oak tree")
+    for (const item of list) {
+        if (item.toLowerCase().includes(target)) return item;
+    }
+    
+    return null;
+}
+
 const commands = {
-    help: "Available commands: north, south, east, west, up, down, look, inventory, open [object], take [item], read [item], about, contact, clear, restart",
+    help: "Available commands: north, south, east, west, up, down, look, examine [object], inventory, open [object], take [item], read [item], about, contact, clear, restart",
     n: () => move("north"),
     north: () => move("north"),
     s: () => move("south"),
@@ -58,10 +79,26 @@ const commands = {
         if (possibleDirections.length > 0) {
             outputText += `\n\nPossible directions: ${possibleDirections.join(", ")}`;
         }
+
+        const roomItems = (rooms[gameState.currentRoom].items || []).filter(itemId => {
+            const item = itemData[itemId];
+            return !item || !item.isVisible || item.isVisible(gameState);
+        });
+        const roomObjects = (rooms[gameState.currentRoom].objects || []).filter(objId => {
+            const obj = itemData[objId];
+            return !obj || !obj.isVisible || obj.isVisible(gameState);
+        });
+        const itemsToExamine = [...roomItems, ...roomObjects];
+
+        if (itemsToExamine.length > 0) {
+            outputText += `\nItems to examine: ${itemsToExamine.join(", ")}`;
+        }
         
         terminal.print(outputText);
     },
+    examine: (target) => commands.look(target),
     l: (target) => commands.look(target),
+    x: (target) => commands.look(target),
     inventory: () => {
         if (gameState.hasLeaflet) {
             return "You are holding a leaflet.";
@@ -74,7 +111,11 @@ const commands = {
         if (!target) {
             return "Open what?";
         }
-        if (target === "mailbox") {
+        
+        const roomObjects = rooms[gameState.currentRoom].objects || [];
+        const matchedObject = findMatch(target, roomObjects);
+
+        if (matchedObject === "mailbox") {
             if (gameState.currentRoom === "westOfHouse") {
                 if (gameState.mailboxOpen) {
                     return "The mailbox is already open.";
@@ -92,10 +133,19 @@ const commands = {
             return "Take what?";
         }
 
-        const roomItems = rooms[gameState.currentRoom].items || [];
-        const roomObjects = rooms[gameState.currentRoom].objects || [];
+        const roomItems = (rooms[gameState.currentRoom].items || []).filter(itemId => {
+            const item = itemData[itemId];
+            return !item || !item.isVisible || item.isVisible(gameState);
+        });
+        const roomObjects = (rooms[gameState.currentRoom].objects || []).filter(objId => {
+            const obj = itemData[objId];
+            return !obj || !obj.isVisible || obj.isVisible(gameState);
+        });
         
-        if (target === "leaflet") {
+        const inventoryItems = gameState.hasLeaflet ? ["leaflet"] : [];
+        const matchedItem = findMatch(target, [...roomItems, ...roomObjects, ...inventoryItems]);
+
+        if (matchedItem === "leaflet") {
             if (gameState.currentRoom === "westOfHouse" && gameState.mailboxOpen && !gameState.hasLeaflet) {
                 gameState.hasLeaflet = true;
                 gameState.score++;
@@ -107,7 +157,7 @@ const commands = {
             }
         }
 
-        if (target === "banana" || target === "bananas") {
+        if (matchedItem === "banana" || matchedItem === "bananas") {
             if (gameState.currentRoom === "shrine") {
                 gameState.isGameOver = true;
                 return "As you reach for a banana, the air grows cold. A booming voice echoes through the clearing: 'YOU DARE TOUCH THE SACRED FRUIT?' The Banana God appears and peels you alive. You have died.";
@@ -116,15 +166,15 @@ const commands = {
             }
         }
 
-        if (roomItems.includes(target)) {
-            return `You can't take the ${target} yet.`;
+        if (roomItems.includes(matchedItem)) {
+            return `You can't take the ${matchedItem} yet.`;
         }
 
-        if (roomObjects.includes(target)) {
-            if (target === "mailbox") {
+        if (roomObjects.includes(matchedItem)) {
+            if (matchedItem === "mailbox") {
                 return "The mailbox is securely bolted to the ground. Maybe try opening the mailbox?";
             }
-            if (target === "shrine") {
+            if (matchedItem === "shrine") {
                 return "You try to lift the massive pile of rotting bananas. It's heavy, it's sticky, and it's definitely not going in your pocket. You could take a single banana.";
             }
             return "That is part of the scenery.";
@@ -137,17 +187,25 @@ const commands = {
             return "Read what?";
         }
 
-        const roomItems = rooms[gameState.currentRoom].items || [];
-        const roomObjects = rooms[gameState.currentRoom].objects || [];
-        const isHolding = (target === "leaflet" && gameState.hasLeaflet);
+        const roomItems = (rooms[gameState.currentRoom].items || []).filter(itemId => {
+            const item = itemData[itemId];
+            return !item || !item.isVisible || item.isVisible(gameState);
+        });
+        const roomObjects = (rooms[gameState.currentRoom].objects || []).filter(objId => {
+            const obj = itemData[objId];
+            return !obj || !obj.isVisible || obj.isVisible(gameState);
+        });
+        const inventoryItems = gameState.hasLeaflet ? ["leaflet"] : [];
+        
+        const matchedItem = findMatch(target, [...roomItems, ...roomObjects, ...inventoryItems]);
 
-        if (isHolding || roomItems.includes(target) || roomObjects.includes(target)) {
-            if (itemData[target]) {
-                return itemData[target].description;
+        if (matchedItem) {
+            if (itemData[matchedItem]) {
+                return itemData[matchedItem].description;
             }
         }
 
-        if (target === "leaflet" && !gameState.hasLeaflet) {
+        if (target.toLowerCase() === "leaflet" && !gameState.hasLeaflet) {
             return "You don't have the leaflet.";
         }
 
