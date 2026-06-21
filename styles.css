@@ -61,6 +61,17 @@ body {
     box-sizing: border-box;
 }
 
+#status-bar .clickable {
+    text-shadow: none;
+    padding: 0 5px;
+}
+
+#status-bar .clickable:hover {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    text-decoration: none;
+}
+
 .terminal-container {
     flex: 1;
     display: flex;

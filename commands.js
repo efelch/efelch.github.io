@@ -4,7 +4,7 @@ const commands = {
         if (gameState.currentRoom === "cave_riverCanyon") {
             helpText += "\nIn this canyon, you can use: move disc from [1-3] to [1-3]";
         }
-        const personalCommands = "About Edward: about, bio, resume, links, photos, contact";
+        const personalCommands = "About Edward: about";
         return `${helpText}\n${personalCommands}`;
     },
     hint: () => {
@@ -305,34 +305,7 @@ const commands = {
         terminal.print("\nGame restarted.");
         terminal.handleScrolling();
     },
-    about: "WELCOME TO THE PERSONAL SITE OF EDWARD FELCH!\n\nEdward is a maker of things, a software engineer, and a craftsman. This site is an interactive portfolio where you can explore his work and history.\n\nTry these commands to find more information:\n- 'about' or 'bio' for his story\n- 'resume' to see his professional background\n- 'links' for business and social media\n- 'photos' to see his creations\n\nThere are secrets hidden throughout the house and forest. Happy hunting!",
-    bio: () => {
-        return "Edward is a software engineer and maker with a passion for artisan crafts. He enjoys creating things both in the digital world and the physical one.";
-    },
-    resume: () => {
-        if (gameState.visitedRooms.includes("house_livingRoom")) {
-            return itemData.resume.description;
-        }
-        return "Edward's resume is currently stored in the trophy case in the living room.";
-    },
-    links: () => {
-        if (gameState.inventory.includes("leaflet")) {
-            return itemData.leaflet.description;
-        }
-        return "You remember seeing some links on a leaflet. Maybe it's in the mailbox?";
-    },
-    photos: () => {
-        if (gameState.visitedRooms.includes("house_attic")) {
-            return itemData.album.description;
-        }
-        return "You remember seeing a photo album somewhere in the house. Maybe the attic?";
-    },
-    contact: () => {
-        if (gameState.inventory.includes("address book")) {
-            return itemData["address book"].description;
-        }
-        return "You don't have Edward's contact information. Perhaps there's an address book in the kitchen?";
-    },
+    about: "WELCOME TO THE PERSONAL SITE OF EDWARD FELCH!\n\nEdward is a software engineer and maker with a passion for artisan crafts. He enjoys creating things both in the digital world and the physical one. This site is an interactive portfolio where you can explore his work and history.\n\nTry the 'look' command to explore your surroundings and find more information about Edward's work.\n\nThere are secrets hidden throughout the house and forest. Happy hunting!",
     look: (target) => {
         if (target) {
             const roomItems = rooms[gameState.currentRoom].items || [];
@@ -357,6 +330,15 @@ const commands = {
                 `<span class="clickable" data-command="${dir}">${dir}</span>`
             );
             outputText += `\n\nPossible directions: ${directionLinks.join(", ")}`;
+            
+            const commonCommands = ["inventory", "hint", "clear"];
+            if (gameState.isGameOver) {
+                commonCommands.push("restart");
+            }
+            const commandLinks = commonCommands.map(cmd => 
+                `<span class="clickable" data-command="${cmd}">${cmd}</span>`
+            );
+            outputText += `\nCommands: ${commandLinks.join(", ")}`;
         }
         
         const roomItems = (rooms[gameState.currentRoom].items || []).filter(itemId => {
