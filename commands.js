@@ -392,6 +392,12 @@ const commands = {
                 } else if (moveable.includes(objId)) {
                     link += ` (<span class="clickable" data-command="move ${objId}">move</span>)`;
                 }
+                
+                // Add "put [item] in" link if player has a compatible item
+                if (objId === "trophy case" && gameState.inventory.includes("trophy")) {
+                    link += ` (<span class="clickable" data-command="put trophy in trophy case">put trophy in</span>)`;
+                }
+                
                 return link;
             });
             
@@ -420,7 +426,15 @@ const commands = {
             };
             const invStrings = gameState.inventory.map(id => {
                 const displayName = itemNames[id] || id;
-                return `<span class="clickable" data-command="examine ${id}">${displayName}</span>`;
+                let link = `<span class="clickable" data-command="examine ${id}">${displayName}</span>`;
+                
+                // Add "put in" link if a container is present
+                const roomObjects = rooms[gameState.currentRoom].objects || [];
+                if (id === "trophy" && findMatch("trophy case", roomObjects)) {
+                    link += ` (<span class="clickable" data-command="put trophy in trophy case">put in case</span>)`;
+                }
+                
+                return link;
             });
             return "You are holding: " + invStrings.join(", ");
         }
