@@ -2,7 +2,7 @@ const GAME_VERSION = "1.0.0";
 const EVENT_CHANCE = 0.15;
 
 const gameState = {
-    currentRoom: "westOfHouse",
+    currentRoom: "forest_westOfHouse",
     inventory: [],
     mailboxOpen: false,
     drawerOpen: false,
@@ -15,7 +15,10 @@ const gameState = {
     isGameOver: false,
     turns: 0,
     score: 0,
-    visitedRooms: ["westOfHouse"]
+    visitedRooms: ["forest_westOfHouse"],
+    puzzlePillars: [[3, 2, 1], [], []],
+    riverPuzzleSolved: false,
+    riverHintStep: 0
 };
 
 function saveGame() {
@@ -89,7 +92,8 @@ function move(direction) {
                 gameState.visitedRooms.push(gameState.currentRoom);
                 gameState.score++;
             }
-            if ((gameState.currentRoom === "caveEntrance" || gameState.currentRoom === "caveDeep") && !gameState.flashlightOn) {
+            const grueRooms = ["cave_caveEntrance", "cave_caveDeep", "cave_riverBank", "cave_riverMidstream", "cave_riverCanyon", "cave_riverDownstream"];
+            if (grueRooms.includes(gameState.currentRoom) && !gameState.flashlightOn) {
                 gameState.isGameOver = true;
             }
             updateStatusBar();

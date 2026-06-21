@@ -6,7 +6,7 @@ const terminal = {
         if (!text) return;
         const line = document.createElement('div');
         line.style.whiteSpace = 'pre-wrap';
-        line.textContent = text;
+        line.innerHTML = text;
         this.output.appendChild(line);
         this.output.scrollTop = this.output.scrollHeight;
     },
@@ -101,8 +101,23 @@ terminal.input.addEventListener('keydown', (e) => {
     }
 });
 
-document.addEventListener('click', () => {
-    terminal.input.focus();
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('clickable')) {
+        const cmd = e.target.getAttribute('data-command');
+        if (cmd) {
+            terminal.input.value = cmd;
+            const event = new KeyboardEvent('keydown', {
+                key: 'Enter',
+                code: 'Enter',
+                which: 13,
+                keyCode: 13,
+                bubbles: true
+            });
+            terminal.input.dispatchEvent(event);
+        }
+    } else {
+        terminal.input.focus();
+    }
 });
 
 // Initial greeting

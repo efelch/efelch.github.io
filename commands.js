@@ -1,8 +1,20 @@
 const commands = {
     help: () => {
-        const gameCommands = "Game commands: north, south, east, west, up, down, look, examine [object], inventory, take [item], use [item], read [item], open [object], close [object], move [object], clear, restart";
+        let helpText = "Game commands: north, south, east, west, up, down, look, examine [object], inventory, take [item], use [item], read [item], open [object], close [object], move [object], hint, clear, restart";
+        if (gameState.currentRoom === "cave_riverCanyon") {
+            helpText += "\nIn this canyon, you can use: move disc from [1-3] to [1-3]";
+        }
         const personalCommands = "About Edward: about, bio, resume, links, photos, contact";
-        return `${gameCommands}\n${personalCommands}`;
+        return `${helpText}\n${personalCommands}`;
+    },
+    hint: () => {
+        const hint = roomHints[gameState.currentRoom];
+        if (!hint) return "I don't have any hints for this area.";
+        
+        if (typeof hint === 'function') {
+            return hint(gameState);
+        }
+        return hint;
     },
     n: () => move("north"),
     north: () => move("north"),
@@ -27,7 +39,7 @@ const commands = {
         const matchedObject = findMatch(target, roomObjects);
 
         if (matchedObject === "mailbox") {
-            if (gameState.currentRoom === "westOfHouse") {
+            if (gameState.currentRoom === "forest_westOfHouse") {
                 if (gameState.mailboxOpen) {
                     return "The mailbox is already open.";
                 }
@@ -39,7 +51,7 @@ const commands = {
         }
 
         if (matchedObject === "drawer") {
-            if (gameState.currentRoom === "kitchen") {
+            if (gameState.currentRoom === "house_kitchen") {
                 if (gameState.drawerOpen) {
                     return "The drawer is already open.";
                 }
@@ -51,7 +63,7 @@ const commands = {
         }
 
         if (matchedObject === "filing cabinet") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 if (gameState.filingCabinetOpen) {
                     return "The filing cabinet is already open.";
                 }
@@ -63,7 +75,7 @@ const commands = {
         }
 
         if (matchedObject === "crates") {
-            if (gameState.currentRoom === "attic") {
+            if (gameState.currentRoom === "house_attic") {
                 if (gameState.cratesOpen) {
                     return "The crates are already open.";
                 }
@@ -75,7 +87,7 @@ const commands = {
         }
 
         if (matchedObject === "trapdoor") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 if (!gameState.rugMoved) {
                     return "You don't see that here.";
                 }
@@ -99,7 +111,7 @@ const commands = {
         const matchedObject = findMatch(target, roomObjects);
 
         if (matchedObject === "mailbox") {
-            if (gameState.currentRoom === "westOfHouse") {
+            if (gameState.currentRoom === "forest_westOfHouse") {
                 if (!gameState.mailboxOpen) {
                     return "The mailbox is already closed.";
                 }
@@ -111,7 +123,7 @@ const commands = {
         }
 
         if (matchedObject === "drawer") {
-            if (gameState.currentRoom === "kitchen") {
+            if (gameState.currentRoom === "house_kitchen") {
                 if (!gameState.drawerOpen) {
                     return "The drawer is already closed.";
                 }
@@ -123,7 +135,7 @@ const commands = {
         }
 
         if (matchedObject === "filing cabinet") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 if (!gameState.filingCabinetOpen) {
                     return "The filing cabinet is already closed.";
                 }
@@ -135,7 +147,7 @@ const commands = {
         }
 
         if (matchedObject === "crates") {
-            if (gameState.currentRoom === "attic") {
+            if (gameState.currentRoom === "house_attic") {
                 if (!gameState.cratesOpen) {
                     return "The crates are already closed.";
                 }
@@ -147,7 +159,7 @@ const commands = {
         }
 
         if (matchedObject === "trapdoor") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 if (!gameState.rugMoved) {
                     return "You don't see that here.";
                 }
@@ -165,11 +177,59 @@ const commands = {
     move: (target) => {
         if (!target) return "Move what?";
         
+        const targetLower = target.toLowerCase();
+        
+        // Handle variations of the move command for the puzzle
+        const movePatterns = [
+            /disc from (\d) to (\d)/i,
+            /disc (\d) to (\d)/i,
+            /from (\d) to (\d)/i
+        ];
+        
+        let match = null;
+        for (const pattern of movePatterns) {
+            match = target.match(pattern);
+            if (match) break;
+        }
+
+        if (match && gameState.currentRoom === "cave_riverCanyon") {
+            const from = parseInt(match[1]) - 1;
+            const to = parseInt(match[2]) - 1;
+
+            if (from < 0 || from > 2 || to < 0 || to > 2) return "Pillars are numbered 1, 2, and 3.";
+            if (from === to) return "The disc is already there.";
+            if (gameState.puzzlePillars[from].length === 0) return "That pillar has no discs.";
+
+            const disc = gameState.puzzlePillars[from].slice(-1)[0];
+            const targetPillar = gameState.puzzlePillars[to];
+
+            if (targetPillar.length > 0 && targetPillar.slice(-1)[0] < disc) {
+                return "A larger disc cannot be placed upon a smaller one. The pillars hum with a warning vibration.";
+            }
+
+            // Execute move
+            gameState.puzzlePillars[from].pop();
+            gameState.puzzlePillars[to].push(disc);
+            
+            // Check Win Condition
+            if (gameState.puzzlePillars[2].length === 3 && !gameState.riverPuzzleSolved) {
+                gameState.riverPuzzleSolved = true;
+                gameState.score += 10;
+                return "As the final disc settles on Pillar 3, the canyon walls groan. A small stone panel slides open, revealing a rusted iron key!";
+            }
+
+            return `You move the disc to Pillar ${to + 1}.`;
+        }
+
+        if (targetLower.includes("disc") && gameState.currentRoom === "cave_riverCanyon") {
+            return "Try: 'move disc from [1-3] to [1-3]'.";
+        }
+
         const roomObjects = rooms[gameState.currentRoom].objects || [];
         const matchedObject = findMatch(target, roomObjects);
         
         if (matchedObject === "rug") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 if (gameState.rugMoved) {
                     return "The rug has already been moved.";
                 }
@@ -205,7 +265,7 @@ const commands = {
         if (!matchedContainer) return "You don't see that container here.";
         
         if (matchedItem === "trophy" && matchedContainer === "trophy case") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 gameState.inventory = gameState.inventory.filter(i => i !== "trophy");
                 gameState.trophyInCase = true;
                 gameState.score += 5;
@@ -216,7 +276,7 @@ const commands = {
         return `You can't put the ${itemTarget} in the ${containerTarget}.`;
     },
     restart: () => {
-        gameState.currentRoom = "westOfHouse";
+        gameState.currentRoom = "forest_westOfHouse";
         gameState.inventory = [];
         gameState.mailboxOpen = false;
         gameState.drawerOpen = false;
@@ -229,7 +289,10 @@ const commands = {
         gameState.isGameOver = false;
         gameState.turns = 0;
         gameState.score = 0;
-        gameState.visitedRooms = ["westOfHouse"];
+        gameState.visitedRooms = ["forest_westOfHouse"];
+        gameState.puzzlePillars = [[3, 2, 1], [], []];
+        gameState.riverPuzzleSolved = false;
+        gameState.riverHintStep = 0;
         
         localStorage.removeItem('adventure_game_save');
         
@@ -247,7 +310,7 @@ const commands = {
         return "Edward is a software engineer and maker with a passion for artisan crafts. He enjoys creating things both in the digital world and the physical one.";
     },
     resume: () => {
-        if (gameState.visitedRooms.includes("livingRoom")) {
+        if (gameState.visitedRooms.includes("house_livingRoom")) {
             return itemData.resume.description;
         }
         return "Edward's resume is currently stored in the trophy case in the living room.";
@@ -259,14 +322,14 @@ const commands = {
         return "You remember seeing some links on a leaflet. Maybe it's in the mailbox?";
     },
     photos: () => {
-        if (gameState.visitedRooms.includes("attic")) {
+        if (gameState.visitedRooms.includes("house_attic")) {
             return itemData.album.description;
         }
         return "You remember seeing a photo album somewhere in the house. Maybe the attic?";
     },
     contact: () => {
-        if (gameState.inventory.includes("addressBook")) {
-            return itemData.addressBook.description;
+        if (gameState.inventory.includes("address book")) {
+            return itemData["address book"].description;
         }
         return "You don't have Edward's contact information. Perhaps there's an address book in the kitchen?";
     },
@@ -283,14 +346,17 @@ const commands = {
             return commands.read(target);
         }
         const room = rooms[gameState.currentRoom];
-        let outputText = `${room.name}\n${room.description()}`;
+        let outputText = `<b>${room.name}</b>\n${room.description()}`;
         
         const possibleDirections = Object.keys(room.exits).filter(dir => 
             ["north", "south", "east", "west", "up", "down", "in", "out"].includes(dir)
         );
         
         if (possibleDirections.length > 0) {
-            outputText += `\n\nPossible directions: ${possibleDirections.join(", ")}`;
+            const directionLinks = possibleDirections.map(dir => 
+                `<span class="clickable" data-command="${dir}">${dir}</span>`
+            );
+            outputText += `\n\nPossible directions: ${directionLinks.join(", ")}`;
         }
         
         const roomItems = (rooms[gameState.currentRoom].items || []).filter(itemId => {
@@ -303,10 +369,33 @@ const commands = {
             const isVisible = !obj || !obj.isVisible || obj.isVisible(gameState);
             return isVisible && !gameState.inventory.includes(objId);
         });
-        const itemsToExamine = [...roomItems, ...roomObjects];
         
-        if (itemsToExamine.length > 0) {
-            outputText += `\nItems to examine: ${itemsToExamine.join(", ")}`;
+        if (roomItems.length > 0 || roomObjects.length > 0) {
+            const itemLinks = roomItems.map(itemId => {
+                const displayName = itemId;
+                return `<span class="clickable" data-command="examine ${itemId}">${displayName}</span> (<span class="clickable" data-command="take ${itemId}">take</span>)`;
+            });
+            
+            const objectLinks = roomObjects.map(objId => {
+                let link = `<span class="clickable" data-command="examine ${objId}">${objId}</span>`;
+                const openable = ["mailbox", "drawer", "filing cabinet", "crates", "trapdoor"];
+                const moveable = ["rug"];
+                
+                if (openable.includes(objId)) {
+                    const isOpen = (objId === "trapdoor" && gameState.trapdoorOpen) || 
+                                   (objId === "mailbox" && gameState.mailboxOpen) ||
+                                   (objId === "drawer" && gameState.drawerOpen) ||
+                                   (objId === "filing cabinet" && gameState.filingCabinetOpen) ||
+                                   (objId === "crates" && gameState.cratesOpen);
+                    const action = isOpen ? "close" : "open";
+                    link += ` (<span class="clickable" data-command="${action} ${objId}">${action}</span>)`;
+                } else if (moveable.includes(objId)) {
+                    link += ` (<span class="clickable" data-command="move ${objId}">move</span>)`;
+                }
+                return link;
+            });
+            
+            outputText += `\nItems to examine: ${[...itemLinks, ...objectLinks].join(", ")}`;
         }
         
         terminal.print(outputText);
@@ -322,12 +411,17 @@ const commands = {
                 leaflet: "a leaflet",
                 resume: "a resume",
                 album: "a photo album",
-                addressBook: "an address book",
+                "address book": "an address book",
                 banana: "a banana",
                 trophy: "a golden trophy",
-                flashlight: "a flashlight"
+                flashlight: "a flashlight",
+                "iron key": "a rusted iron key",
+                "brass gear": "a brass gear"
             };
-            const invStrings = gameState.inventory.map(id => itemNames[id] || id);
+            const invStrings = gameState.inventory.map(id => {
+                const displayName = itemNames[id] || id;
+                return `<span class="clickable" data-command="examine ${id}">${displayName}</span>`;
+            });
             return "You are holding: " + invStrings.join(", ");
         }
     },
@@ -347,7 +441,7 @@ const commands = {
             gameState.flashlightOn = !gameState.flashlightOn;
             let response = gameState.flashlightOn ? "You turn on the flashlight. A bright beam of light cuts through the darkness." : "You turn off the flashlight.";
             
-            if (!gameState.flashlightOn && (gameState.currentRoom === "caveEntrance" || gameState.currentRoom === "caveDeep")) {
+            if (!gameState.flashlightOn && (gameState.currentRoom === "cave_caveEntrance" || gameState.currentRoom === "cave_caveDeep" || gameState.currentRoom === "cave_riverBank" || gameState.currentRoom === "cave_riverMidstream" || gameState.currentRoom === "cave_riverCanyon" || gameState.currentRoom === "cave_riverDownstream")) {
                 gameState.isGameOver = true;
                 response += "\n\nAs the light fades, you hear a low growl. A grue leaps from the shadows and eats you!";
             }
@@ -379,7 +473,7 @@ const commands = {
         }
         
         if (matchedItem === "leaflet") {
-            if (gameState.currentRoom === "westOfHouse" && gameState.mailboxOpen) {
+            if (gameState.currentRoom === "forest_westOfHouse" && gameState.mailboxOpen) {
                 gameState.inventory.push("leaflet");
                 gameState.score++;
                 return "Taken.";
@@ -389,7 +483,7 @@ const commands = {
         }
         
         if (matchedItem === "resume") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 if (!gameState.filingCabinetOpen) {
                     return "The filing cabinet is closed.";
                 }
@@ -402,7 +496,7 @@ const commands = {
         }
         
         if (matchedItem === "album") {
-            if (gameState.currentRoom === "attic") {
+            if (gameState.currentRoom === "house_attic") {
                 if (!gameState.cratesOpen) {
                     return "The crates are closed.";
                 }
@@ -415,7 +509,7 @@ const commands = {
         }
         
         if (matchedItem === "trophy") {
-            if (gameState.currentRoom === "attic") {
+            if (gameState.currentRoom === "house_attic") {
                 if (!gameState.cratesOpen) {
                     return "The crates are closed.";
                 }
@@ -428,7 +522,7 @@ const commands = {
         }
         
         if (matchedItem === "flashlight") {
-            if (gameState.currentRoom === "livingRoom") {
+            if (gameState.currentRoom === "house_livingRoom") {
                 if (!gameState.trophyInCase) {
                     return "You don't see a flashlight here.";
                 }
@@ -440,26 +534,59 @@ const commands = {
             }
         }
         
-        if (matchedItem === "addressBook") {
-            if (gameState.currentRoom === "kitchen") {
+        if (matchedItem === "address book") {
+            if (gameState.currentRoom === "house_kitchen") {
                 if (!gameState.drawerOpen) {
                     return "The drawer is closed.";
                 }
-                gameState.inventory.push("addressBook");
+                gameState.inventory.push("address book");
                 gameState.score++;
                 return "Taken.";
             } else {
                 return "You don't see that here.";
             }
         }
+
+        if (matchedItem === "iron key") {
+            if (gameState.currentRoom === "cave_riverCanyon") {
+                if (!gameState.riverPuzzleSolved) {
+                    return "You don't see that here.";
+                }
+                gameState.inventory.push("iron key");
+                gameState.score += 5;
+                return "Taken.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
+
+        if (matchedItem === "brass gear") {
+            if (gameState.currentRoom === "house_cellar") {
+                gameState.inventory.push("brass gear");
+                gameState.score += 5;
+                return "Taken. The gear feels heavy and cold in your hand.";
+            } else {
+                return "You don't see that here.";
+            }
+        }
         
         if (matchedItem === "banana" || matchedItem === "bananas") {
-            if (gameState.currentRoom === "shrine") {
+            if (gameState.currentRoom === "forest_shrine") {
                 gameState.isGameOver = true;
                 return "As you reach for a banana, the air grows cold. A booming voice echoes through the clearing: 'YOU DARE TOUCH THE SACRED FRUIT?' The Banana God appears and peels you alive. You have died.";
             } else {
                 return "You don't see any bananas here.";
             }
+        }
+        
+        if (matchedItem === "basalt discs" || matchedItem === "discs") {
+            if (gameState.currentRoom === "cave_riverCanyon") {
+                return "The discs are far too heavy to carry. You can move them between the pillars using the 'move' command (e.g., 'move disc from 1 to 2').";
+            }
+        }
+        
+        if (matchedItem === "banana slug" || matchedItem === "slug") {
+            return "The banana slug is far too slimy and delicate to pick up. Besides, it seems quite happy where it is, leaving its glistening trail of slime.";
         }
         
         if (roomItems.includes(matchedItem)) {
