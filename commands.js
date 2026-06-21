@@ -215,6 +215,7 @@ const commands = {
             if (gameState.puzzlePillars[2].length === 3 && !gameState.riverPuzzleSolved) {
                 gameState.riverPuzzleSolved = true;
                 gameState.score += 10;
+                updateStatusBar();
                 return "As the final disc settles on Pillar 3, the canyon walls groan. A small stone panel slides open, revealing a rusted iron key!";
             }
 
@@ -269,6 +270,7 @@ const commands = {
                 gameState.inventory = gameState.inventory.filter(i => i !== "trophy");
                 gameState.trophyInCase = true;
                 gameState.score += 5;
+                updateStatusBar();
                 return "You carefully place the trophy in the trophy case. As it clicks into place, a hidden compartment at the back pops open, revealing a flashlight!";
             }
         }
@@ -472,6 +474,7 @@ const commands = {
             if (gameState.currentRoom === "forest_westOfHouse" && gameState.mailboxOpen) {
                 gameState.inventory.push("leaflet");
                 gameState.score++;
+                updateStatusBar();
                 return "Taken.";
             } else {
                 return "You don't see that here.";
@@ -485,6 +488,7 @@ const commands = {
                 }
                 gameState.inventory.push("resume");
                 gameState.score++;
+                updateStatusBar();
                 return "Taken.";
             } else {
                 return "You don't see that here.";
@@ -498,6 +502,7 @@ const commands = {
                 }
                 gameState.inventory.push("album");
                 gameState.score++;
+                updateStatusBar();
                 return "Taken.";
             } else {
                 return "You don't see that here.";
@@ -511,6 +516,7 @@ const commands = {
                 }
                 gameState.inventory.push("trophy");
                 gameState.score++;
+                updateStatusBar();
                 return "Taken.";
             } else {
                 return "You don't see that here.";
@@ -524,6 +530,7 @@ const commands = {
                 }
                 gameState.inventory.push("flashlight");
                 gameState.score++;
+                updateStatusBar();
                 return "Taken.";
             } else {
                 return "You don't see that here.";
@@ -537,6 +544,7 @@ const commands = {
                 }
                 gameState.inventory.push("address book");
                 gameState.score++;
+                updateStatusBar();
                 return "Taken.";
             } else {
                 return "You don't see that here.";
@@ -550,6 +558,7 @@ const commands = {
                 }
                 gameState.inventory.push("iron key");
                 gameState.score += 5;
+                updateStatusBar();
                 return "Taken.";
             } else {
                 return "You don't see that here.";
@@ -560,6 +569,7 @@ const commands = {
             if (gameState.currentRoom === "house_cellar") {
                 gameState.inventory.push("brass gear");
                 gameState.score += 5;
+                updateStatusBar();
                 return "Taken. The gear feels heavy and cold in your hand.";
             } else {
                 return "You don't see that here.";

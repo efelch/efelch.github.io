@@ -109,7 +109,27 @@ function move(direction) {
 function updateStatusBar() {
     const statusBar = document.getElementById('status-bar');
     const roomName = rooms[gameState.currentRoom].name;
-    statusBar.innerHTML = `<span>${roomName}</span><span>Score: ${gameState.score}</span><span>Turns: ${gameState.turns}</span>`;
+    const maxScore = calculateMaxScore();
+    statusBar.innerHTML = `<span>${roomName}</span><span>Score: ${gameState.score}/${maxScore}</span><span>Turns: ${gameState.turns}</span>`;
+}
+
+function calculateMaxScore() {
+    // 1 point for each room visited
+    let totalScore = Object.keys(rooms).length;
+
+    // Puzzle and item points
+    totalScore += 10; // riverPuzzleSolved
+    totalScore += 5;  // trophyInCase
+    totalScore += 1;  // take leaflet
+    totalScore += 1;  // take resume
+    totalScore += 1;  // take album
+    totalScore += 1;  // take trophy
+    totalScore += 1;  // take flashlight
+    totalScore += 1;  // take address book
+    totalScore += 5;  // take iron key
+    totalScore += 5;  // take brass gear
+
+    return totalScore;
 }
 
 function getRandomEventMessage() {
