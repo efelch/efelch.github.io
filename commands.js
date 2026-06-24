@@ -1,11 +1,11 @@
+"use strict";
 const commands = {
     help: () => {
         let helpText = "Game commands: north, south, east, west, up, down, look, examine [object], inventory, take [item], use [item], read [item], open [object], close [object], move [object], hint, clear, restart";
         if (gameState.currentRoom === "cave_riverCanyon") {
             helpText += "\nIn this canyon, you can use: move disc from [1-3] to [1-3]";
         }
-        const personalCommands = "About Edward: about";
-        return `${helpText}\n${personalCommands}`;
+        return helpText;
     },
     hint: () => {
         const hint = roomHints[gameState.currentRoom];
@@ -44,7 +44,7 @@ const commands = {
                     return "The mailbox is already open.";
                 }
                 gameState.mailboxOpen = true;
-                return "Opening the small mailbox reveals a leaflet.";
+                return "Opening the small mailbox reveals a leaflet with some notes about the game.";
             } else {
                 return "You don't see that here.";
             }
@@ -56,7 +56,7 @@ const commands = {
                     return "The drawer is already open.";
                 }
                 gameState.drawerOpen = true;
-                return "You open the drawer, revealing an address book.";
+                return "You open the drawer, but it appears to be empty.";
             } else {
                 return "You don't see that here.";
             }
@@ -68,7 +68,7 @@ const commands = {
                     return "The filing cabinet is already open.";
                 }
                 gameState.filingCabinetOpen = true;
-                return "You open the filing cabinet, revealing a resume.";
+                return "You open the filing cabinet, but it appears to be empty.";
             } else {
                 return "You don't see that here.";
             }
@@ -307,7 +307,6 @@ const commands = {
         terminal.print("\nGame restarted.");
         terminal.handleScrolling();
     },
-    about: "WELCOME TO THE PERSONAL SITE OF EDWARD FELCH!\n\nEdward is a software engineer and maker with a passion for artisan crafts. He enjoys creating things both in the digital world and the physical one. This site is an interactive portfolio where you can explore his work and history.\n\nTry the 'look' command to explore your surroundings and find more information about Edward's work.\n\nThere are secrets hidden throughout the house and forest. Happy hunting!",
     look: (target) => {
         if (target) {
             const roomItems = rooms[gameState.currentRoom].items || [];
@@ -331,7 +330,7 @@ const commands = {
             const directionLinks = possibleDirections.map(dir => 
                 `<span class="clickable" data-command="${dir}">${dir}</span>`
             );
-            outputText += `\n\nPossible directions: ${directionLinks.join(", ")}`;
+            outputText += `\n\nDirections: ${directionLinks.join(", ")}`;
             
             const commonCommands = ["inventory", "hint", "clear"];
             if (gameState.isGameOver) {
@@ -399,9 +398,7 @@ const commands = {
         } else {
             const itemNames = {
                 leaflet: "a leaflet",
-                resume: "a resume",
                 album: "a photo album",
-                "address book": "an address book",
                 banana: "a banana",
                 trophy: "a golden trophy",
                 flashlight: "a flashlight",
@@ -481,20 +478,6 @@ const commands = {
             }
         }
         
-        if (matchedItem === "resume") {
-            if (gameState.currentRoom === "house_livingRoom") {
-                if (!gameState.filingCabinetOpen) {
-                    return "The filing cabinet is closed.";
-                }
-                gameState.inventory.push("resume");
-                gameState.score++;
-                updateStatusBar();
-                return "Taken.";
-            } else {
-                return "You don't see that here.";
-            }
-        }
-        
         if (matchedItem === "album") {
             if (gameState.currentRoom === "house_attic") {
                 if (!gameState.cratesOpen) {
@@ -537,20 +520,6 @@ const commands = {
             }
         }
         
-        if (matchedItem === "address book") {
-            if (gameState.currentRoom === "house_kitchen") {
-                if (!gameState.drawerOpen) {
-                    return "The drawer is closed.";
-                }
-                gameState.inventory.push("address book");
-                gameState.score++;
-                updateStatusBar();
-                return "Taken.";
-            } else {
-                return "You don't see that here.";
-            }
-        }
-
         if (matchedItem === "iron key") {
             if (gameState.currentRoom === "cave_riverCanyon") {
                 if (!gameState.riverPuzzleSolved) {

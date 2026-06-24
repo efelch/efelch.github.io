@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="Edward Felch's Personal Website - Maker of things, software engineer, specializing in woodworking and laser engraving.">
     <meta name="keywords" content="Edward Felch, Software Engineer, Architect, Maker, Woodworking, Laser Engraving, Hanahan Personalization, Macabre and Mirthworks, Interactive Portfolio, Terminal Website">
     <meta name="author" content="Edward Felch">
@@ -45,31 +45,56 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Edward Felch — Interactive Portfolio",
+      "url": "https://edwardfelch.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://edwardfelch.com/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
 </head>
 <body>
-    <header id="site-header" style="display: none;">
-EDWARD FELCH: The Artisan's Portfolio
-Personal Interactive Website - A Maker's Story
+    <header id="site-header" class="hidden" aria-hidden="true">
+THE ARTISAN'S ADVENTURE
+Interactive Story - A Maker's Tale
 Copyright (c) 2024, 2025, 2026
-Hanahan Personalization, All rights reserved.
-Macabre and Mirthworks, All rights reserved.
+All rights reserved.
 Version 1.0.0
     </header>
 
-    <!-- SEO Content - Accessible to crawlers but hidden from view -->
-    <section id="seo-content" style="position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;">
-        <h1>Edward Felch</h1>
-        <h2>Software Engineer, Architect, & Maker</h2>
+    <!-- SEO Content - Accessible to crawlers but visually hidden -->
+    <section id="seo-content" class="visually-hidden">
+        <nav aria-label="Site sections">
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#photos">Photos</a></li>
+                <li><a href="#links">Links</a></li>
+                <li><a href="#gateway">Gateway</a></li>
+            </ul>
+        </nav>
+
+        <h1 id="about">Edward Felch</h1>
+        <h2 id="experience">Software Engineer, Architect, & Maker</h2>
         <p>Edward Felch is a senior software architect and co-founder of Hanahan Personalization and Macabre and Mirthworks. Specializing in woodworking, laser engraving, and full-stack development.</p>
         
-        <h3>Skills & Expertise</h3>
+        <h3 id="photos">Skills & Expertise</h3>
         <ul>
             <li>Software Architecture & Full-stack Development</li>
             <li>Woodworking & Artisan Crafts</li>
             <li>Laser Engraving & Personalization</li>
         </ul>
 
-        <h3>Projects & Businesses</h3>
+        <h3 id="links">Projects & Businesses</h3>
         <article>
             <h4>Hanahan Personalization</h4>
             <p>Custom woodworking and laser engraved gifts.</p>
@@ -78,20 +103,98 @@ Version 1.0.0
             <h4>Macabre and Mirthworks</h4>
             <p>Spooky and whimsical artisanal creations.</p>
         </article>
+        <h3 id="gateway">Gateway to Adventure</h3>
+        <p>Enter the text-adventure portion of the site through the gateway.</p>
     </section>
     <div id="status-bar"></div>
     <div class="crt-overlay"></div>
     <div id="jumpscare-overlay">
         <img src="images/ghost.png.jpeg" alt="GHOST" id="ghost-img">
     </div>
-    <div class="terminal-container" id="terminal">
-        <div id="output"></div>
-        <div class="input-line">
-            <span class="prompt">></span>
-            <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false">
+    <div id="sr-updates" aria-live="polite" class="visually-hidden"></div>
+    <main role="main" id="main">
+        <h1 id="room-name" class="visually-hidden">ABOUT</h1>
+        <div class="terminal-container" id="terminal">
+            <div id="output-wrapper">
+                <div id="output"></div>
+                <div class="input-line">
+                    <span class="prompt">></span>
+                    <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false" enterkeyhint="go" inputmode="text">
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
+    
+    <!-- Conventional content mirrored from rooms (hidden by default for progressive enhancement/SEO) -->
+    <section id="mirrored-content" class="visually-hidden" aria-hidden="true">
+        <article id="content-about">
+            <h2>About</h2>
+            <p>
+                Hey there! You've reached Edward Felch's personal website. Sorry! I know this is a Zork rip-off, but I
+                wanted to make something a little more fun. Each of these rooms has objects that you can examine or look
+                at that will tell you a bit about myself. Feel free to proceed through the next few rooms to learn about
+                me, and then if you're in the mood for an old-school text adventure game, keep on playing!
+            </p>
+        </article>
+
+        <article id="content-experience">
+            <h2>Experience</h2>
+            <p>
+                I've been a career software engineer since 2000 — working across the full stack in a variety of languages
+                and frameworks, while specializing within the Java/Spring ecosystem. The achievement I am most proud of is
+                developing an onboarding program that enables a new hire to make meaningful contributions to the team
+                within a week, while learning about the company, our standards, and best practices, and having a great time
+                while doing so.
+            </p>
+            <p>
+                I'm also a maker of things — a woodworker, a sculptor, a Halloween and Christmas prop maker, and a hobbyist
+                game developer. I love to learn how to build new things, and I love sharing what I've learned with others.
+            </p>
+        </article>
+
+        <article id="content-photos">
+            <h2>Photos</h2>
+            <p>
+                Here you can look at some photo albums to see a few highlights of things I've made as well as a couple of
+                pictures of myself and my family.
+            </p>
+            <!-- Optional: add a simple list of albums for crawlers; actual gallery can be implemented later -->
+            <ul>
+                <li>Woodworking projects</li>
+                <li>Halloween and Christmas props</li>
+                <li>Family highlights</li>
+            </ul>
+        </article>
+
+        <article id="content-links">
+            <h2>Links</h2>
+            <p>If you are interested in the work I do and want to contact me or learn more, go ahead and check out:</p>
+            <ul>
+                <li>
+                    <a href="https://www.linkedin.com/in/edwardfelch/" target="_blank" rel="noopener noreferrer">Edward's LinkedIn Profile</a>
+                </li>
+                <li>
+                    <a href="https://hanahanpersonalization.com" target="_blank" rel="noopener noreferrer">Website — Hanahan Personalization</a>
+                </li>
+                <li>
+                    <a href="https://macabreandmirthworks.com" target="_blank" rel="noopener noreferrer">Website — Macabre and Mirthworks</a>
+                </li>
+                <li>
+                    <a href="https://www.instagram.com/macabreandmirthworks/" target="_blank" rel="noopener noreferrer">Instagram — Macabre and Mirthworks</a>
+                </li>
+            </ul>
+        </article>
+
+        <article id="content-gateway">
+            <h2>Gateway to Adventure</h2>
+            <p>
+                You have reached the end of the introductory section.
+                Before you stands a magical portal. It looks like it leads somewhere else...
+            </p>
+        </article>
+    </section>
     <!-- Load Region and Core Data -->
+    <script src="data/regions/personal.js"></script>
     <script src="data/regions/house.js"></script>
     <script src="data/regions/forest.js"></script>
     <script src="data/regions/cave.js"></script>
@@ -100,6 +203,7 @@ Version 1.0.0
     <script src="data/core/navigation.js"></script>
 
     <script src="gameData.js"></script>
+    <script src="worldValidator.js"></script>
     <script src="gameEngine.js"></script>
     <script src="commands.js"></script>
     <script src="terminal.js"></script>

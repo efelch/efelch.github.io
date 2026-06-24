@@ -1,3 +1,4 @@
+"use strict";
 const directionAliases = {
     'n': 'north',
     's': 'south',
@@ -6,3 +7,4 @@ const directionAliases = {
     'u': 'up',
     'd': 'down'
 };
+Object.freeze(directionAliases);

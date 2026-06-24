@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" aria-labelledby="title desc" role="img">
+  <title id="title">Forest Map (Website-Personal / forest.js)</title>
+  <desc id="desc">Spatial layout of rooms around the house with connections. Blocks indicate rooms; lines indicate passable paths.</desc>
+
+  <style>
+    .room { fill: #0a0a0a; stroke: #00ff41; stroke-width: 2; rx: 8; ry: 8; }
+    .label { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 14px; fill: #00ff41; }
+    .sublabel { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; fill: #7cff9a; }
+    .conn { stroke: #00ff41; stroke-width: 2; }
+    .note { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; fill: #7cff9a; }
+    .legend { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; fill: #00ff41; }
+    .bg { fill: #000; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="1200" height="700" />
+
+  <!-- Node positions (cx, cy) -->
+  <!-- Column X: 150 (Forest West), 350 (West of/SE of), 500 (North/South of, Forest North/South), 650 (East of/SE of), 850 (Forest East), 1030 (Cave) -->
+  <!-- Row Y: 100 (Forest North row), 200 (House North row), 300 (House South row), 400 (Forest South row), 520 (Shrine row) -->
+
+  <!-- Connections -->
+  <!-- Around the top corridor -->
+  <line class="conn" x1="500" y1="100" x2="850" y2="300" opacity="0.6" />
+  <line class="conn" x1="500" y1="100" x2="150" y2="300" opacity="0.6" />
+
+  <!-- Lateral forest connections -->
+  <line class="conn" x1="150" y1="300" x2="500" y2="400" opacity="0.8" />
+  <line class="conn" x1="850" y1="300" x2="500" y2="400" opacity="0.8" />
+  <line class="conn" x1="150" y1="300" x2="500" y2="100" opacity="0.6" />
+  <line class="conn" x1="850" y1="300" x2="500" y2="100" opacity="0.6" />
+
+  <!-- House sides and neighbors -->
+  <line class="conn" x1="350" y1="200" x2="150" y2="300" /> <!-- West of House ↔ Forest West -->
+  <line class="conn" x1="650" y1="200" x2="850" y2="300" /> <!-- East of House ↔ Forest East -->
+  <line class="conn" x1="350" y1="300" x2="150" y2="300" /> <!-- Southwest of House ↔ Forest West -->
+  <line class="conn" x1="650" y1="300" x2="850" y2="300" /> <!-- Southeast of House ↔ Forest East -->
+
+  <!-- Vertical near the house -->
+  <line class="conn" x1="500" y1="100" x2="500" y2="200" /> <!-- Forest North ↔ North of House -->
+  <line class="conn" x1="500" y1="300" x2="500" y2="400" /> <!-- South of House ↔ Forest South -->
+  <line class="conn" x1="500" y1="400" x2="500" y2="520" /> <!-- Forest South ↔ Shrine -->
+
+  <!-- Horizontal along south-of row -->
+  <line class="conn" x1="350" y1="300" x2="500" y2="300" /> <!-- Southwest ↔ South of House -->
+  <line class="conn" x1="500" y1="300" x2="650" y2="300" /> <!-- South of House ↔ Southeast -->
+
+  <!-- East corridor to cave -->
+  <line class="conn" x1="850" y1="300" x2="1030" y2="300" /> <!-- Forest East → Cave Entrance -->
+
+  <!-- Rooms (as rounded rectangles 180x48) -->
+  <!-- Forest North Corridor -->
+  <rect class="room" x="410" y="76" width="180" height="48" />
+  <text class="label" x="500" y="105" text-anchor="middle">FOREST (NORTH)</text>
+
+  <!-- House North Row -->
+  <rect class="room" x="260" y="176" width="180" height="48" />
+  <text class="label" x="350" y="205" text-anchor="middle">WEST OF HOUSE</text>
+
+  <rect class="room" x="460" y="176" width="180" height="48" />
+  <text class="label" x="550" y="205" text-anchor="middle">NORTH OF HOUSE</text>
+
+  <rect class="room" x="610" y="176" width="180" height="48" />
+  <text class="label" x="700" y="205" text-anchor="middle">EAST OF HOUSE</text>
+
+  <!-- House South Row -->
+  <rect class="room" x="260" y="276" width="180" height="48" />
+  <text class="label" x="350" y="305" text-anchor="middle">SOUTHWEST OF</text>
+  <text class="sublabel" x="350" y="321" text-anchor="middle">HOUSE</text>
+
+  <rect class="room" x="460" y="276" width="180" height="48" />
+  <text class="label" x="550" y="305" text-anchor="middle">SOUTH OF HOUSE</text>
+
+  <rect class="room" x="610" y="276" width="180" height="48" />
+  <text class="label" x="700" y="305" text-anchor="middle">SOUTHEAST OF</text>
+  <text class="sublabel" x="700" y="321" text-anchor="middle">HOUSE</text>
+
+  <!-- Forest West/East (placed at mid-row for clarity) -->
+  <rect class="room" x="60" y="276" width="180" height="48" />
+  <text class="label" x="150" y="305" text-anchor="middle">FOREST (WEST)</text>
+
+  <rect class="room" x="760" y="276" width="180" height="48" />
+  <text class="label" x="850" y="305" text-anchor="middle">FOREST (EAST)</text>
+
+  <!-- Forest South Corridor -->
+  <rect class="room" x="460" y="376" width="180" height="48" />
+  <text class="label" x="550" y="405" text-anchor="middle">FOREST (SOUTH)</text>
+
+  <!-- Shrine -->
+  <rect class="room" x="460" y="496" width="180" height="48" />
+  <text class="label" x="550" y="525" text-anchor="middle">STRANGE CLEARING</text>
+
+  <!-- Cave Entrance (outside forest.js but linked) -->
+  <rect class="room" x="940" y="276" width="220" height="48" />
+  <text class="label" x="1050" y="305" text-anchor="middle">CAVE ENTRANCE</text>
+
+  <!-- Blocked notes -->
+  <text class="note" x="350" y="160" text-anchor="middle">north blocked</text>
+  <text class="note" x="700" y="160" text-anchor="middle">north blocked</text>
+  <text class="note" x="550" y="235" text-anchor="middle">south blocked</text>
+  <text class="note" x="330" y="232" text-anchor="end">east blocked</text>
+  <text class="note" x="730" y="232" text-anchor="start">west blocked (use “enter window”/“in”)</text>
+
+  <!-- Legend -->
+  <g transform="translate(40,620)">
+    <text class="legend" x="0" y="0">Legend:</text>
+    <text class="legend" x="0" y="20">• Boxes are rooms from data/regions/forest.js (plus Cave Entrance from cave module).</text>
+    <text class="legend" x="0" y="40">• Lines indicate passable movement (directions as defined in exits).</text>
+    <text class="legend" x="0" y="60">• “north/south/east/west blocked” indicates intentionally impassable directions.</text>
+  </g>
+</svg>

@@ -1,7 +1,7 @@
 const forestData = {
     items: {
         leaflet: {
-            description: "BUSINESS SITES:\n- Hanahan Personalization: [Link]\n- Macabre & Mirthworks: [Link]\n\nSOCIAL MEDIA:\n- LinkedIn: [Link]\n- Instagram: [Link]\n- Twitter: [Link]",
+            description: "WELCOME TO THE ADVENTURE!\n\nThis is a classic text-based adventure game. You can navigate the world using cardinal directions (north, south, east, west) and interact with objects using commands like 'look', 'examine', 'take', and 'use'.\n\nYour goal is to explore the area, solve puzzles, and collect treasures.\n\nGood luck!",
             isVisible: (state) => state.mailboxOpen || state.inventory.includes('leaflet')
         },
         mailbox: {
@@ -30,10 +30,11 @@ const forestData = {
     },
     hints: {
         "forest_westOfHouse": "Maybe you should check the mailbox for any interesting mail.",
-        "forest_northOfHouse": "The forest to the north looks dark, but maybe there's a way around the house.",
         "forest_southOfHouse": "There's a faint path leading south to a strange clearing.",
         "forest_eastOfHouse": "The kitchen window is open. I wonder if you can 'enter window' or go 'in'?",
-        "forest_forestNorth": "This is a good place to explore the woods. You can see the house to the south.",
+        "forest_southWestOfHouse": "From here you can head east to the south side of the house or north back to the west side.",
+        "forest_southEastOfHouse": "From here you can go north to the east side of the house or west to the south side.",
+        "forest_forestNorthOfShrine": "This is a good place to explore the woods. You can see the house to the south.",
         "forest_forestSouth": "The path south leads to a clearing with a strange shrine.",
         "forest_shrine": "That shrine is covered in bananas. Best not to touch them unless you're feeling very brave... or foolish.",
         "forest_forestEast": "A narrow path to the east leads into a dark cave. You'll probably need a light source if you go in there.",
@@ -47,70 +48,79 @@ const forestData = {
             objects: ["mailbox"],
             description: () => {
                 let desc = "You are standing in an open field west of a white house. The windows are boarded up like eyes sewn shut. ";
-                desc += gameState.mailboxOpen ? "There is an open mailbox here." : "There is a small mailbox here.";
+                desc += gameState.mailboxOpen ? "There is an open mailbox here. " : "There is a small mailbox here. ";
+                desc += "Paths lead west into the forest and south along the house. The door to the east is boarded shut.";
                 return desc;
             },
             exits: {
-                north: "forest_northOfHouse",
-                south: "forest_southOfHouse",
+                south: "forest_southWestOfHouse",
                 west: "forest_forestWest",
                 east: "The door is boarded and cannot be opened."
-            }
-        },
-        forest_northOfHouse: {
-            name: "NORTH OF HOUSE",
-            typeOfRoom: "forest",
-            description: () => "You are facing the north side of a white house. There is no door here, and the windows are barred with heavy, rusted iron. To the north, the forest looms like a wall of shadows.",
-            exits: {
-                west: "forest_westOfHouse",
-                north: "forest_forestNorth",
-                east: "forest_eastOfHouse",
-                south: "The house is solid here, and the windows are barred."
             }
         },
         forest_southOfHouse: {
             name: "SOUTH OF HOUSE",
             typeOfRoom: "forest",
-            description: () => "You are facing the south side of a white house. The paint is peeling like dead skin. To the south, the forest seems to be slowly encroaching on the property.",
+            description: () => "You are at the south side of a white house. The paint is peeling like dead skin. You can move along the foundation to the west or east; the house blocks the way north.",
             exits: {
-                west: "forest_westOfHouse",
-                south: "forest_forestSouth",
-                east: "forest_eastOfHouse",
+                // Only lateral movement along the south face
+                west: "forest_southWestOfHouse",
+                east: "forest_southEastOfHouse",
+                // House wall blocks north
                 north: "The house is solid here, and the paint is peeling."
             }
         },
         forest_eastOfHouse: {
             name: "EAST OF HOUSE",
             typeOfRoom: "forest",
-            description: () => "You are behind the white house. A single kitchen window is open, like a gasping mouth. To the east, the trees of the dense forest are packed so tightly they seem to be choking each other.",
+            description: () => "You are behind the white house. A single kitchen window is open, like a gasping mouth. You could squeeze through the window to the west, head south along the house, or push east into the forest.",
             exits: {
-                west: "The house is solid here, except for the window.",
-                north: "forest_northOfHouse",
-                south: "forest_southOfHouse",
+                // Going west enters through the kitchen window
+                west: "house_kitchen",
+                // South heads to SOUTHEAST OF HOUSE
+                south: "forest_southEastOfHouse",
                 east: "forest_forestEast",
                 "enter window": "house_kitchen",
                 "in": "house_kitchen"
             }
         },
-        forest_forestNorth: {
+        // New room: SOUTHWEST OF HOUSE
+        forest_southWestOfHouse: {
+            name: "SOUTHWEST OF HOUSE",
+            typeOfRoom: "forest",
+            description: () => "You are standing southwest of the white house. The ground is uneven here, and the forest presses close from the west and south. You can go north to the west side of the house or east to the south side.",
+            exits: {
+                north: "forest_westOfHouse",
+                east: "forest_southOfHouse"
+            }
+        },
+        // New room: SOUTHEAST OF HOUSE
+        forest_southEastOfHouse: {
+            name: "SOUTHEAST OF HOUSE",
+            typeOfRoom: "forest",
+            description: () => "You are standing southeast of the white house. Vines creep along the foundation, and the forest thickens to the east and south. You can go north to the east side of the house or west to the south side.",
+            exits: {
+                north: "forest_eastOfHouse",
+                west: "forest_southOfHouse"
+            }
+        },
+        forest_forestNorthOfShrine: {
             name: "FOREST",
             typeOfRoom: "forest",
             objects: ["giant oak tree", "banana slug"],
-            description: () => "This is a dimly lit forest, with large trees all around. A giant oak tree dominates this part of the woods. A bright yellow banana slug is slowly crawling across the mossy floor. To the south, you can see the north side of a white house. The forest continues east and west.",
+            description: () => "This is a dimly lit forest, with large trees all around. A giant oak tree dominates this part of the woods, and a bright yellow banana slug crawls across the mossy floor. A faint path leads south to a strange clearing with a shrine; to the north the woods deepen.",
             exits: {
-                south: "forest_northOfHouse",
-                east: "forest_forestEast",
-                west: "forest_forestWest"
+                north: "forest_forestSouth",
+                south: "forest_shrine"
             }
         },
         forest_forestSouth: {
             name: "FOREST",
             typeOfRoom: "forest",
             objects: ["tangled brambles", "banana slug"],
-            description: () => "This is a dimly lit forest, with large trees all around. Tangled brambles block any path further south, except for a faint path leading towards a strange clearing. A bright yellow banana slug is making its way across a nearby log. To the north, you can see the south side of a white house. The forest continues east and west.",
+            description: () => "This is a dimly lit forest, with large trees all around. Tangled brambles block any path to the north along the house line. A faint path leads south toward a strange clearing. A bright yellow banana slug makes its way across a nearby log. The forest continues east and west.",
             exits: {
-                north: "forest_southOfHouse",
-                south: "forest_shrine",
+                south: "forest_forestNorthOfShrine",
                 east: "forest_forestEast",
                 west: "forest_forestWest"
             }
@@ -122,18 +132,17 @@ const forestData = {
             objects: ["shrine"],
             description: () => "You are in a quiet clearing. In the center stands an odd shrine: a massive pile of bananas in various stages of decomposition. The smell is sickly sweet and overwhelming. A faint path leads north back into the forest.",
             exits: {
-                north: "forest_forestSouth"
+                north: "forest_forestNorthOfShrine"
             }
         },
         forest_forestEast: {
             name: "FOREST",
             typeOfRoom: "forest",
             objects: ["banana slug"],
-            description: () => "This is a dimly lit forest, with large trees all around. To the west, you can see a white house through the trees. A narrow path leads into a dark cave to the east. A bright yellow banana slug is inching along a damp rock. The forest also continues north and south.",
+            description: () => "This is a dimly lit forest, with large trees all around. To the west, you can see a white house through the trees. A narrow path leads into a dark cave to the east. A bright yellow banana slug inches along a damp rock. The forest continues south.",
             exits: {
                 west: "forest_eastOfHouse",
                 east: "cave_caveEntrance",
-                north: "forest_forestNorth",
                 south: "forest_forestSouth"
             }
         },
@@ -141,10 +150,9 @@ const forestData = {
             name: "FOREST",
             typeOfRoom: "forest",
             objects: ["banana slug"],
-            description: () => "This is a dimly lit forest, with large trees all around. To the east, you can see the west side of a white house. A bright yellow banana slug is slowly crossing your path. The forest also continues north and south.",
+            description: () => "This is a dimly lit forest, with large trees all around. To the east, you can see the west side of a white house. A bright yellow banana slug slowly crosses your path. The forest continues south.",
             exits: {
                 east: "forest_westOfHouse",
-                north: "forest_forestNorth",
                 south: "forest_forestSouth"
             }
         }

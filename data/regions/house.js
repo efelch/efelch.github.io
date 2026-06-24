@@ -5,12 +5,8 @@ const houseData = {
             isVisible: (state) => state.drawerOpen || state.inventory.includes('address book'),
             aliases: ["address", "book", "addressbook"]
         },
-        resume: {
-            description: "EDWARD FELCH - RESUME\n--------------------\nSOFTWARE ENGINEER & MAKER\n\nEXPERIENCE:\n- Co-founder, Hanahan Personalization\n- Co-founder, Macabre and Mirthworks\n- Senior Software Architect\n\nSKILLS:\n- Full-stack Development\n- Woodworking & Laser Engraving\n- System Architecture\n\nYou can view the full PDF version at: [Link to Resume PDF]",
-            isVisible: (state) => state.filingCabinetOpen || state.inventory.includes('resume')
-        },
         album: {
-            description: "A DUSTY PHOTO ALBUM\n-------------------\nInside are photographs of beautifully engraved wooden signs and intricate laser-cut art. In every photo, there's a shadow that doesn't quite match the objects, and some of the faces in the background seem to have been scratched out.\n\nView the gallery at: [Link to Gallery/Instagram]",
+            description: "A DUSTY PHOTO ALBUM\n-------------------\nInside are photographs of various personal projects and artisanal creations. In every photo, there's a shadow that doesn't quite match the objects, and some of the faces in the background seem to have been scratched out.",
             isVisible: (state) => state.cratesOpen || state.inventory.includes('album')
         },
         trophy: {
@@ -24,12 +20,12 @@ const houseData = {
         drawer: {
             description: "It's a small wooden drawer built into the kitchen counter.",
             isVisible: () => true,
-            dynamicDescription: (state) => state.drawerOpen ? "The drawer is open, revealing an address book." : "The drawer is closed."
+            dynamicDescription: (state) => state.drawerOpen ? "The drawer is open, but appears to be empty." : "The drawer is closed."
         },
         "filing cabinet": {
             description: "A metal filing cabinet with two drawers. It looks slightly out of place in the living room.",
             isVisible: () => true,
-            dynamicDescription: (state) => state.filingCabinetOpen ? "The filing cabinet is open, revealing a resume." : "The filing cabinet is closed."
+            dynamicDescription: (state) => state.filingCabinetOpen ? "The filing cabinet is open, but appears to be empty." : "The filing cabinet is closed."
         },
         table: {
             description: "It's a sturdy wooden kitchen table. Deep scratches mark the surface, as if someone—or something—was desperately clawing at it."
@@ -85,7 +81,7 @@ const houseData = {
         }
     },
     hints: {
-        "house_kitchen": (state) => state.drawerOpen ? "You've found the address book. There are other rooms to explore to the west, north, and south." : "That drawer in the counter looks like it might hold something useful.",
+        "house_kitchen": (state) => state.drawerOpen ? "You've explored the kitchen. There are other rooms to explore to the west, north, and south." : "That drawer in the counter looks like it might hold something useful.",
         "house_livingRoom": (state) => {
             if (!state.rugMoved) return "The rug in the center of the room seems to be hiding something. Maybe you should try to 'move' it?";
             if (!state.trapdoorOpen) return "You've found a trapdoor! Now you just need to 'open' it.";
@@ -102,7 +98,6 @@ const houseData = {
         house_kitchen: {
             name: "KITCHEN",
             typeOfRoom: "house",
-            items: ["address book"],
             objects: ["window", "table", "drawer"],
             description: () => {
                 let desc = "The kitchen is unnervingly clean, yet a faint smell of decay lingers. A table sits in the center. ";
@@ -121,7 +116,7 @@ const houseData = {
         house_livingRoom: {
             name: "LIVING ROOM",
             typeOfRoom: "house",
-            items: ["resume", "flashlight"],
+            items: ["flashlight"],
             objects: ["trophy case", "filing cabinet", "rug", "trapdoor"],
             description: () => {
                 let desc = "The living room is filled with long, flickering shadows. ";
@@ -138,10 +133,13 @@ const houseData = {
             exits: {
                 east: "house_kitchen",
                 up: "house_attic",
-                down: () => {
-                    if (!gameState.rugMoved) return "You can't go that way.";
-                    if (!gameState.trapdoorOpen) return "The trapdoor is closed.";
-                    return "house_cellar";
+                down: {
+                    target: "house_cellar",
+                    condition: () => gameState.rugMoved && gameState.trapdoorOpen,
+                    message: () => {
+                        if (!gameState.rugMoved) return "You can't go that way.";
+                        if (!gameState.trapdoorOpen) return "The trapdoor is closed.";
+                    }
                 }
             }
         },
