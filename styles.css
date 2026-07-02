@@ -83,6 +83,40 @@ body::after {
     100% { opacity: 0.95; }
 }
 
+/* Pulsing rune highlight for waystone shards */
+.rune-pulse {
+    animation: runePulse 1.6s ease-in-out infinite;
+    display: inline-block; /* allow subtle scale without layout glitches */
+    will-change: text-shadow, opacity, transform;
+}
+
+.rune-green {
+    color: #22ff55;
+}
+
+.rune-red {
+    color: #ff2b2b;
+}
+
+@keyframes runePulse {
+    0%, 100% {
+        text-shadow:
+            0 0 1px currentColor,
+            0 0 3px rgba(255, 255, 255, 0.06),
+            0 0 6px currentColor;
+        opacity: 0.7;
+        transform: scale(0.985);
+    }
+    50% {
+        text-shadow:
+            0 0 14px currentColor,
+            0 0 22px rgba(255, 255, 255, 0.18),
+            0 0 30px currentColor;
+        opacity: 1;
+        transform: scale(1.045);
+    }
+}
+
 #status-bar {
     background-color: var(--text-color);
     color: var(--bg-color);
@@ -300,4 +334,13 @@ body.a11y-mode .terminal-container {
     transform: none;
     filter: none;
     text-shadow: none;
+}
+
+/* Ensure primary content renders above visual overlays in Safari/WebKit */
+#main,
+.terminal-container,
+#output-wrapper,
+#output {
+    position: relative;
+    z-index: 30;
 }

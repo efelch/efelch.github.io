@@ -106,7 +106,7 @@ Version 1.0.0
         <h3 id="gateway">Gateway to Adventure</h3>
         <p>Enter the text-adventure portion of the site through the gateway.</p>
     </section>
-    <div id="status-bar"></div>
+    <div id="status-bar" aria-atomic="true"></div>
     <div class="crt-overlay"></div>
     <div id="jumpscare-overlay">
         <img src="images/ghost.png.jpeg" alt="GHOST" id="ghost-img">
@@ -119,7 +119,7 @@ Version 1.0.0
                 <div id="output"></div>
                 <div class="input-line">
                     <span class="prompt">></span>
-                    <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false" enterkeyhint="go" inputmode="text">
+                    <input type="text" id="command-input" aria-label="Enter command" autofocus autocomplete="off" spellcheck="false" enterkeyhint="go" inputmode="text">
                 </div>
             </div>
         </div>
@@ -194,18 +194,20 @@ Version 1.0.0
         </article>
     </section>
     <!-- Load Region and Core Data -->
-    <script src="data/regions/personal.js"></script>
-    <script src="data/regions/house.js"></script>
-    <script src="data/regions/forest.js"></script>
-    <script src="data/regions/cave.js"></script>
-    <script src="data/regions/town.js"></script>
-    <script src="data/core/roomTypes.js"></script>
-    <script src="data/core/navigation.js"></script>
+    <script src="scripts/data/regions/personal.js"></script>
+    <script src="scripts/data/regions/house.js"></script>
+    <script src="scripts/data/regions/forest.js"></script>
+    <script src="scripts/data/regions/cave.js"></script>
+    <script src="scripts/data/regions/temple.js"></script>
+    <script src="scripts/data/regions/town.js"></script>
+    <script src="scripts/data/core/roomTypes.js"></script>
+    <script src="scripts/data/core/navigation.js"></script>
 
-    <script src="gameData.js"></script>
-    <script src="worldValidator.js"></script>
-    <script src="gameEngine.js"></script>
-    <script src="commands.js"></script>
-    <script src="terminal.js"></script>
+    <script src="scripts/gameData.js"></script>
+    <script src="scripts/worldValidator.js"></script>
+    <script src="scripts/puzzles/templeTorches.js"></script>
+    <script src="scripts/gameEngine.js"></script>
+    <script src="scripts/commands.js"></script>
+    <script src="scripts/terminal.js"></script>
 </body>
 </html>
